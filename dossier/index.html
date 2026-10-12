@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crew Dossier — Final Empire Recruitment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#33413a; --desk2:#2b382f;
+  --paper:#f4ead2; --paper2:#efe1c4; --paper-edge:#e2d3ad;
+  --ink:#2b2417; --ink-soft:#5c5138; --ink-faint:#8a7c5c;
+  --manila:#dcc389; --manila-dk:#c9ab68; --manila-tab:#e4cf9a;
+  --line:#cdb886; --line-soft:#e0cfa4;
+  --red:#a3322a; --blue:#39557f; --amber:#9a6a1e; --green:#436e3b;
+  --accent:#7a1f18;
+  --shadow:rgba(40,30,10,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --desk:#100d08; --desk2:#171209;
+    --paper:#e7dab8; --paper2:#ded0aa; --paper-edge:#cdba8c;
+    --ink:#241d12; --ink-soft:#574c34; --ink-faint:#7d7053;
+    --manila:#c8ac6e; --manila-dk:#b2965a; --manila-tab:#d2b878;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --desk:#100d08; --desk2:#171209;
+  --paper:#e7dab8; --paper2:#ded0aa; --paper-edge:#cdba8c;
+  --ink:#241d12; --ink-soft:#574c34; --ink-faint:#7d7053;
+  --manila:#c8ac6e; --manila-dk:#b2965a; --manila-tab:#d2b878;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'EB Garamond',Georgia,serif; color:var(--ink);
+  background:
+    radial-gradient(120% 90% at 50% -10%, var(--desk2), var(--desk) 70%),
+    var(--desk);
+  min-height:100vh; padding:14px 12px 60px;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1000px; margin:0 auto}
+
+/* header / toolbar */
+.top{display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px 16px; margin:4px 4px 14px}
+.brand{display:flex; align-items:center; gap:12px}
+.sigil{width:38px;height:38px;flex:0 0 auto}
+.brand h1{font-family:'Cinzel',serif; font-weight:700; color:#f0e6cd; font-size:20px; margin:0; letter-spacing:.5px; line-height:1.05}
+.brand .sub{font-family:'Special Elite',monospace; color:#c9bd9a; font-size:11px; letter-spacing:1px; text-transform:uppercase; margin-top:2px}
+.toolbar{margin-left:auto; display:flex; flex-wrap:wrap; gap:8px}
+.tool{font-family:'Special Elite',monospace; font-size:12px; letter-spacing:.5px; color:#efe6cd;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16); padding:7px 12px; border-radius:5px; cursor:pointer}
+.tool:hover{background:rgba(255,255,255,.13)}
+.tool.file{position:relative; overflow:hidden}
+.tool.file input{position:absolute; inset:0; opacity:0; cursor:pointer}
+
+/* folder */
+.folder{background:linear-gradient(180deg,var(--manila),var(--manila-dk));
+  border-radius:4px 12px 12px 12px; padding:0; box-shadow:0 14px 40px var(--shadow), 0 2px 0 rgba(255,255,255,.25) inset;
+  position:relative}
+.tabs{display:flex; flex-wrap:wrap; gap:3px; padding:8px 10px 0}
+.ftab{font-family:'Special Elite',monospace; cursor:pointer; border:none; text-align:left;
+  background:linear-gradient(180deg,var(--manila-tab),var(--manila)); color:var(--ink-soft);
+  padding:7px 12px 8px; border-radius:8px 8px 0 0; box-shadow:0 -1px 0 rgba(255,255,255,.35) inset;
+  min-width:78px; line-height:1.1; opacity:.82; transform:translateY(2px)}
+.ftab .ftab-l{display:block; font-size:13px; color:var(--ink)}
+.ftab .ftab-s{display:block; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint)}
+.ftab.active{opacity:1; transform:translateY(0); background:var(--paper); box-shadow:0 -2px 6px rgba(0,0,0,.08)}
+.ftab.pending .ftab-l::after{content:" ·"; color:var(--accent)}
+.ftab.active.pending .ftab-l::after{content:""}
+
+/* paper */
+.sheet-paper{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 12%),
+    repeating-linear-gradient(0deg, rgba(120,90,40,.028) 0 1px, transparent 1px 26px),
+    linear-gradient(180deg,var(--paper),var(--paper2));
+  border:1px solid var(--paper-edge); margin:0 10px 12px; border-radius:2px;
+  padding:22px 24px 30px; min-height:60vh;
+  box-shadow:0 10px 24px rgba(30,20,0,.22);
+}
+@media(max-width:640px){ .sheet-paper{padding:16px 14px 24px} .top{margin-bottom:10px} }
+
+/* doc head */
+.dochead{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:16px}
+.dh-org{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--ink-faint)}
+.dh-title{font-family:'Cinzel',serif; font-weight:700; font-size:20px; color:var(--ink); line-height:1.1; margin-top:2px}
+.dh-right{text-align:right; flex:0 0 auto}
+.dh-file{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1px; color:var(--ink-faint); margin-top:6px; text-transform:uppercase}
+.stamp{display:inline-block; font-family:'Special Elite',monospace; font-weight:700; font-size:13px; letter-spacing:2px;
+  color:var(--red); border:2.5px solid var(--red); border-radius:5px; padding:3px 9px; transform:rotate(4deg);
+  opacity:.86; text-transform:uppercase; box-shadow:inset 0 0 0 1px rgba(163,50,42,.25)}
+.stamp.blue{color:var(--blue); border-color:var(--blue)}
+.stamp.amber{color:var(--amber); border-color:var(--amber)}
+.stamp.green{color:var(--green); border-color:var(--green)}
+
+/* generic bits */
+.lede,.assess-lede{font-size:17px; line-height:1.5}
+.assess-lede{color:var(--ink-soft)}
+.fineprint{font-family:'Special Elite',monospace; font-size:11px; color:var(--ink-faint); margin-top:18px; letter-spacing:.4px}
+.muted{color:var(--ink-faint)} .small{font-size:13px}
+.block-label{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--accent); border-bottom:1px dotted var(--line); padding-bottom:3px; margin:16px 0 8px}
+.grid-label{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft); margin:20px 0 8px}
+.lbl{font-family:'Special Elite',monospace; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:3px}
+
+/* buttons */
+.btn{font-family:'Special Elite',monospace; font-size:13px; letter-spacing:.5px; cursor:pointer;
+  border:1.5px solid var(--ink-soft); color:var(--ink); background:rgba(255,255,255,.35);
+  padding:9px 16px; border-radius:6px}
+.btn:hover{background:rgba(255,255,255,.6)}
+.btn.primary{background:var(--accent); color:#f6ecd6; border-color:var(--accent)}
+.btn.primary:hover{background:#8f261d}
+.btn.ghost{background:transparent}
+.btn.small{padding:6px 11px; font-size:12px}
+.btn:disabled{opacity:.4; cursor:default}
+.intake-actions{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:18px 0 4px}
+
+/* name inputs */
+.namebar{display:flex; flex-wrap:wrap; gap:14px; margin:16px 0}
+.namebar.tight{margin:6px 0 14px}
+.namebar label{flex:1 1 220px; font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft)}
+input,textarea,select{font-family:'EB Garamond',serif; font-size:16px; color:var(--ink);
+  background:rgba(255,255,255,.55); border:none; border-bottom:1.5px solid var(--ink-soft);
+  padding:6px 4px; width:100%; margin-top:4px; border-radius:2px 2px 0 0}
+textarea{border:1.5px solid var(--line); border-radius:4px; resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none; background:rgba(255,255,255,.85); border-bottom-color:var(--accent)}
+.fld{display:block; margin:12px 0}
+.fld span{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft)}
+
+/* quiz */
+.qbar{height:6px; background:rgba(120,90,40,.18); border-radius:4px; overflow:hidden; margin-bottom:14px}
+.qbar-fill{height:100%; background:var(--accent); transition:width .25s}
+.qnum{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; color:var(--ink-faint); text-transform:uppercase}
+.qtext{font-size:21px; line-height:1.4; margin:8px 0 18px; font-weight:500}
+.qopts{display:flex; flex-direction:column; gap:10px}
+.qopt{text-align:left; font-family:'EB Garamond',serif; font-size:16.5px; line-height:1.4; cursor:pointer;
+  background:rgba(255,255,255,.4); border:1.5px solid var(--line); border-left:4px solid var(--line);
+  padding:12px 14px; border-radius:5px; color:var(--ink)}
+.qopt:hover{background:rgba(255,255,255,.72); border-left-color:var(--accent)}
+.qopt.sel{background:#efe0b8; border-left-color:var(--accent); box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.quiz-nav{display:flex; justify-content:space-between; align-items:center; margin-top:18px}
+
+/* assessment */
+.assess-suggest{display:flex; flex-wrap:wrap; gap:12px; margin:14px 0}
+.sug{flex:1 1 240px; background:rgba(255,255,255,.4); border:1px solid var(--line); border-radius:7px; padding:13px 14px}
+.sug.picked{border-color:var(--accent); background:#efe0b8}
+.sug-rank{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent)}
+.sug-metal{font-family:'Cinzel',serif; font-weight:700; font-size:18px; margin:3px 0}
+.sug-sub{font-family:'EB Garamond'; font-weight:400; font-size:14px; color:var(--ink-faint)}
+.sug-tag{font-size:15px; line-height:1.4; margin-bottom:10px; color:var(--ink-soft)}
+.assess-path{margin:14px 0; font-size:16px; background:rgba(255,255,255,.32); padding:10px 12px; border-radius:6px; border-left:4px solid var(--blue)}
+.assess-path .lbl{display:inline; color:var(--blue)}
+.assess-seeds{margin:14px 0; font-size:16px}
+.assess-seeds ul,.seedbox ul{margin:6px 0 0; padding-left:20px}
+.assess-seeds li,.seedbox li{margin:3px 0; line-height:1.4}
+
+/* metal grid */
+.metal-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:10px}
+.mcard{position:relative; text-align:left; cursor:pointer; background:rgba(255,255,255,.4);
+  border:1px solid var(--line); border-radius:7px; padding:12px; color:var(--ink)}
+.mcard:hover{background:rgba(255,255,255,.72); border-color:var(--accent)}
+.mcard.picked{border-color:var(--accent); background:#efe0b8; box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.mc-name{font-family:'Cinzel',serif; font-weight:700; font-size:16px}
+.mc-metal{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); margin:1px 0 6px}
+.mc-tag{font-size:14px; line-height:1.35; color:var(--ink-soft)}
+.mc-badge{display:inline-block; margin-top:8px; font-family:'Special Elite',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--green); border:1px solid var(--green); border-radius:3px; padding:1px 5px}
+
+/* dossier sheet */
+.dossier-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px}
+@media(max-width:720px){ .dossier-grid{grid-template-columns:1fr; gap:8px} }
+.metal-head{border-bottom:1px solid var(--line); margin-bottom:8px}
+.mh-name{font-family:'Cinzel',serif; font-weight:700; font-size:22px}
+.mh-metal{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-faint)}
+.fantasy{font-size:16px; line-height:1.55}
+.do-list{margin:0; padding-left:20px} .do-list li{margin:6px 0; line-height:1.4; font-size:15px}
+.gotcha{background:rgba(163,50,42,.08); border-left:4px solid var(--red); padding:10px 12px; border-radius:0 5px 5px 0; margin:12px 0; font-size:15px; line-height:1.45}
+.cost{font-family:'Special Elite',monospace; font-size:12px; color:var(--ink-soft); line-height:1.5}
+.cover-hook{background:rgba(57,85,127,.08); border-left:4px solid var(--blue); padding:10px 12px; border-radius:0 5px 5px 0; font-size:15px; line-height:1.45}
+.sheet{background:rgba(255,255,255,.34); border:1px solid var(--line); border-radius:7px; padding:14px}
+.sheet h4{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); margin:0 0 10px}
+.attr-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:5px; margin-bottom:10px}
+.attr{background:var(--paper2); border:1px solid var(--line); border-radius:5px; text-align:center; padding:5px 0}
+.attr .k{font-family:'Special Elite',monospace; font-size:9px; letter-spacing:.5px; color:var(--ink-faint)}
+.attr .v{font-family:'Cinzel',serif; font-weight:700; font-size:19px}
+.derived{display:grid; grid-template-columns:1fr 1fr; gap:2px 14px}
+.d{display:flex; justify-content:space-between; border-bottom:1px dotted var(--line); padding:3px 0; font-size:14px}
+.d.hl{background:rgba(163,50,42,.09); font-weight:600; padding-left:4px; border-radius:3px}
+.dk{color:var(--ink-soft)} .dv{font-family:'Special Elite',monospace; font-size:12.5px}
+.skills-mini{display:grid; grid-template-columns:1fr 1fr; gap:2px 14px}
+.srow{display:flex; justify-content:space-between; border-bottom:1px dotted var(--line); padding:3px 0; font-size:14px}
+.sn .ranks{font-family:'Special Elite',monospace; font-size:9.5px; color:var(--ink-faint); margin-left:5px}
+.sm{font-family:'Special Elite',monospace; font-weight:700}
+.talent-line{margin-top:8px; font-size:14px; line-height:1.4}
+.talent-line .tn{font-family:'Cinzel',serif; font-weight:700; display:block}
+.talent-line .td{color:var(--ink-soft)}
+.kit-line{margin-top:8px; font-size:13.5px; line-height:1.45; color:var(--ink-soft)}
+.backstory{background:rgba(255,255,255,.3); border:1px solid var(--line); border-radius:7px; padding:12px 14px}
+.seedbox{margin:8px 0; font-size:15px}
+.linkx{background:none; border:none; color:var(--accent); font-family:'Special Elite',monospace; font-size:11px; cursor:pointer; text-decoration:underline; padding:0 2px}
+
+/* cover papers */
+.papers-top{display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px; align-items:flex-start}
+.p-role{font-family:'Cinzel',serif; font-weight:700; font-size:22px; line-height:1.1}
+.p-house{font-size:15px; color:var(--ink-soft); margin-top:2px}
+.p-persona{flex:1 1 200px; max-width:280px}
+.p-persona label{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft)}
+.p-blurb{font-size:16.5px; line-height:1.5; margin:14px 0}
+.p-two{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:14px 0}
+@media(max-width:640px){ .p-two{grid-template-columns:1fr} }
+.p-why,.p-house-face{background:rgba(255,255,255,.32); border:1px solid var(--line); border-radius:6px; padding:11px 13px; font-size:15px; line-height:1.45}
+.p-street{margin-top:8px; padding-top:8px; border-top:1px dotted var(--line); color:var(--ink-soft); font-size:14px}
+.p-sell{background:rgba(154,106,30,.09); border:1px solid var(--amber); border-radius:7px; padding:13px 15px; margin-top:10px}
+.sell-h{font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber); margin-bottom:8px}
+.p-sell ol{margin:0 0 10px; padding-left:22px} .p-sell li{margin:5px 0; font-size:15.5px; line-height:1.4}
+.never{background:rgba(163,50,42,.1); border-left:4px solid var(--red); padding:9px 12px; border-radius:0 5px 5px 0; font-size:15px}
+.never-l{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--red); display:block; margin-bottom:3px}
+.cover-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; margin-top:6px}
+.ccard{text-align:left; cursor:pointer; background:rgba(255,255,255,.4); border:1px solid var(--line); border-radius:7px; padding:12px; color:var(--ink)}
+.ccard:hover{background:rgba(255,255,255,.72); border-color:var(--amber)}
+.ccard.picked{border-color:var(--amber); background:rgba(154,106,30,.12)}
+.cc-title{font-family:'Cinzel',serif; font-weight:700; font-size:15px; line-height:1.15}
+.cc-house{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:var(--ink-faint); margin:2px 0 6px}
+.cc-blurb{font-size:14px; line-height:1.4; color:var(--ink-soft)}
+.house-block{margin:18px 0}
+.house-name{font-family:'Cinzel',serif; font-weight:700; font-size:18px; color:var(--ink)}
+.house-face{font-size:14.5px; line-height:1.45; color:var(--ink-soft); margin:2px 0 8px; max-width:70ch}
+
+/* ledger */
+.ledger-boxings{display:flex; flex-wrap:wrap; align-items:center; gap:12px; background:rgba(255,255,255,.32); border:1px solid var(--line); border-radius:7px; padding:12px 14px; margin-bottom:6px}
+.ledger-boxings label{flex:1 1 200px; font-family:'Special Elite',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-soft)}
+.coin{width:26px; height:26px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #e9cf87, #b8912f); border:1.5px solid #8a6c1e; flex:0 0 auto; box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.ledger-items{display:grid; grid-template-columns:1fr 1fr; gap:2px 18px; margin-bottom:12px}
+@media(max-width:600px){ .ledger-items{grid-template-columns:1fr} }
+.litem{display:flex; justify-content:space-between; align-items:center; border-bottom:1px dotted var(--line); padding:5px 0}
+.chk{display:flex; align-items:center; gap:8px; font-size:15.5px; cursor:pointer; flex:1}
+.chk input{width:auto; margin:0}
+.chk .off{text-decoration:line-through; color:var(--ink-faint)}
+.chk.big{font-family:'Special Elite',monospace; font-size:12px; letter-spacing:.5px; text-transform:uppercase; color:var(--ink-soft); margin:10px 0}
+.additem{display:flex; gap:8px; align-items:flex-end}
+.additem input{flex:1}
+
+/* journal / crew */
+.jlog{display:flex; flex-direction:column; gap:8px; margin-bottom:14px}
+.jentry{background:rgba(255,255,255,.3); border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:0 5px 5px 0; padding:8px 12px; position:relative}
+.je-when{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint)}
+.je-text{font-size:15.5px; line-height:1.45; white-space:pre-wrap}
+.jentry .linkx{position:absolute; top:8px; right:8px}
+.jadd{display:flex; flex-direction:column; gap:8px; background:rgba(255,255,255,.28); border:1px solid var(--line); border-radius:7px; padding:12px}
+.crewlist{display:flex; flex-direction:column; gap:8px; margin:10px 0}
+.crewrow{display:grid; grid-template-columns:1fr 1.3fr 1.6fr auto; gap:8px; align-items:center}
+@media(max-width:640px){ .crewrow{grid-template-columns:1fr 1fr; } }
+.crewrow .linkx{font-size:16px}
+
+/* sealed */
+.sealwrap{margin-top:10px; transition:filter .2s}
+.sealwrap.blur textarea{filter:blur(6px)}
+.sealwrap.blur::after{content:"click to reveal"; position:absolute}
+
+/* combat */
+.combat-two{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:14px 0}
+@media(max-width:640px){ .combat-two{grid-template-columns:1fr} }
+.combat-choice{background:rgba(255,255,255,.32); border:1px solid var(--line); border-radius:7px; padding:13px 15px}
+.combat-choice h4{font-family:'Cinzel',serif; font-weight:700; font-size:16px; margin:0 0 6px; color:var(--ink)}
+.combat-choice .cc-when{font-family:'Special Elite',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); margin-bottom:6px}
+.combat-choice p{font-size:14.5px; line-height:1.45; margin:0}
+.move-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin-top:10px}
+.movecard{background:rgba(255,255,255,.34); border:1px solid var(--line); border-radius:7px; padding:13px 14px}
+.movecard h4{font-family:'Cinzel',serif; font-weight:700; font-size:16px; margin:0 0 2px; color:var(--ink)}
+.mv-cost{font-family:'Special Elite',monospace; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--accent); margin-bottom:7px; display:block}
+.movecard p{font-size:14.5px; line-height:1.42; color:var(--ink-soft); margin:0 0 6px}
+.movecard .mv-ex{font-size:13px; font-style:italic; color:var(--ink-faint); line-height:1.4}
+.roll-outcomes{margin-top:2px}
+
+/* notyet */
+.notyet{text-align:center; padding:36px 12px; color:var(--ink-soft)}
+.notyet-mark{font-size:40px; color:var(--line); margin-bottom:8px}
+.notyet p{font-size:17px; max-width:46ch; margin:0 auto 18px}
+
+/* toast */
+#toast{position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+  background:#231b0f; color:#f2e7cc; font-family:'Special Elite',monospace; font-size:13px; letter-spacing:.5px;
+  padding:11px 18px; border-radius:7px; box-shadow:0 8px 24px rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:.25s; z-index:50; border:1px solid rgba(255,255,255,.14)}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+/* print */
+@media print{
+  body{background:#fff; padding:0}
+  .top,.tabs{display:none !important}
+  .folder{box-shadow:none; background:#fff}
+  .sheet-paper{margin:0; border:none; box-shadow:none; background:#fff}
+  .btn,.intake-actions,.linkx{display:none !important}
+  .stamp{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <svg class="sigil" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#c9bd9a" stroke-width="1.5"/>
+        <circle cx="20" cy="20" r="12" fill="none" stroke="#a3322a" stroke-width="1.5"/>
+        <path d="M20 3 L20 37 M3 20 L37 20 M8 8 L32 32 M32 8 L8 32" stroke="#c9bd9a" stroke-width="1" opacity=".55"/>
+        <circle cx="20" cy="20" r="3.4" fill="#a3322a"/>
+      </svg>
+      <div>
+        <h1>Crew Dossier</h1>
+        <div class="sub">Final Empire · Recruitment Intake</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="tool" id="tb-export">⭳ Export file</button>
+      <button class="tool" id="tb-print">⎙ Print dossier</button>
+      <label class="tool file">⭱ Load file<input type="file" id="tb-import" accept=".json"></label>
+      <button class="tool" id="tb-reset">✦ New</button>
+    </div>
+  </div>
+  <div id="app"></div>
+</div>
+<div id="toast"></div>
+
+<!-- SCRIPTS: assembled inline for the published build -->
+<script>
+/* ===== data.js ===== */
+/* ============================================================
+   mistborn-crew-builder — crew data
+   All rules sourced from the Mistborn Handbook (Cosmere RPG,
+   Plotweaver system), Era 1 / Final Empire.
+   ============================================================ */
+
+/* The eighteen skills, grouped by attribute pillar. */
+const SKILLS = {
+  physical: [
+    ["Agility", "SPD"], ["Athletics", "STR"], ["Heavy Weaponry", "STR"],
+    ["Light Weaponry", "SPD"], ["Stealth", "SPD"], ["Thievery", "SPD"]
+  ],
+  cognitive: [
+    ["Crafting", "INT"], ["Deduction", "INT"], ["Discipline", "WIL"],
+    ["Intimidation", "WIL"], ["Lore", "INT"], ["Medicine", "INT"]
+  ],
+  spiritual: [
+    ["Deception", "PRE"], ["Insight", "AWA"], ["Leadership", "PRE"],
+    ["Perception", "AWA"], ["Persuasion", "PRE"], ["Survival", "AWA"]
+  ]
+};
+const ATTR_OF_SKILL = {};
+Object.values(SKILLS).flat().forEach(([s,a]) => ATTR_OF_SKILL[s] = a);
+
+/* Reference tables from the Handbook, keyed by attribute score. */
+function movementFor(spd){ return spd<=0?20 : spd<=2?25 : spd<=4?30 : spd<=6?40 : spd<=8?60 : 80; }
+function liftFor(str){ return str<=0?100 : str<=2?200 : str<=4?500 : str<=6?1000 : str<=8?5000 : 10000; }
+function recoveryFor(wil){ return wil<=0?"1d4" : wil<=2?"1d6" : wil<=4?"1d8" : wil<=6?"1d10" : wil<=8?"1d12" : "1d20"; }
+function sensesFor(awa){ return awa<=0?"5 ft." : awa<=2?"10 ft." : awa<=4?"20 ft." : awa<=6?"50 ft." : awa<=8?"100 ft." : "Unaffected by obscured senses"; }
+
+/* ------------------------------------------------------------
+   MISTING PACKAGES — one Allomantic metal each.
+   Attributes total 12, none above 3 (creation rules).
+   Skills: 1 free Allomancy rank (from Misting Snap) + 4 more,
+   none above 2 at creation.
+   Every Misting is human, gains a bonus talent (here, the key
+   talent of a heroic path that fits the fantasy).
+   ------------------------------------------------------------ */
+const MISTINGS = [
+  {
+    id: "steel", metal: "Steel", name: "Coinshot", pillar: "physical",
+    tagline: "You push on metal and the world moves. Fly over rooftops. Turn a coin into a bullet.",
+    fantasy: "The most visible Allomancer in any fight. You Steelpush metal away from you — launch a coin hard enough to punch through a guard, or throw yourself into the mist-dark sky by pushing off a dropped coin below. Coinshots own the vertical. Rooftops, spires, the space above a crowd — all yours.",
+    doInScene: [
+      "<b>Steelpush to fly.</b> Drop a coin, push off it, and launch up to 20 ft. per Investiture spent. Chain jumps across rooftops.",
+      "<b>Shoot a coin.</b> Push a coin as a deadly projectile: a ranged Allomancy attack for 1d4 impact damage (die grows with your Allomancy ranks).",
+      "<b>Sense metal.</b> While burning steel you see blue lines to every nearby metal source — guards' weapons, hidden hinges, coins in a pocket."
+    ],
+    gotcha: "Steel only <i>pushes</i>. You can't pull metal toward you (that's iron). Push off something anchored and <i>you</i> move; push a loose object and <i>it</i> flies. And you can't push aluminum — some enemies carry it on purpose.",
+    cost: "Sensing metal is free while you have any Investiture. Steelpushing costs 1+ Investiture, up to your limit.",
+    attrs: { STR:1, SPD:3, INT:1, WIL:2, AWA:2, PRE:3 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Agility":2, "Perception":1, "Light Weaponry":1 },
+    bonusTalent: { name:"Vigilant Stance (Warrior key)", note:"A defensive fighting stance — Coinshots are combatants." },
+    kit: "Underworld",
+    coverHook: "Coinshots can't hide what they are for long — flying is memorable. Your cover has to explain the rooftops, or never let anyone see you use it.",
+    roleNote: "The mobile striker. Opens scenes vertically — escapes, ambushes from above, reaching places no one else can."
+  },
+  {
+    id: "iron", metal: "Iron", name: "Lurcher", pillar: "physical",
+    tagline: "You pull metal toward you. Yank a gun from a hand. Reel yourself across a gap.",
+    fantasy: "Iron's mirror to steel: you Ironpull, dragging metal toward your center of mass. Disarm an enemy from across the room, snatch a falling ally's dropped weapon, or anchor to a heavy beam and reel yourself in. Lurchers famously carry wooden shields to catch the metal they redirect at themselves.",
+    doInScene: [
+      "<b>Disarm.</b> Ironpull a weapon or metal object out of someone's grip — often an opposed test, their Athletics vs. your Allomancy.",
+      "<b>Reel in.</b> Pull yourself toward a heavy anchor, or pull a lighter object to your hand. 20 ft. per Investiture spent.",
+      "<b>Sense metal.</b> Like steel, burning iron shows blue lines to nearby metal — the size of the line tells you the size of the source."
+    ],
+    gotcha: "Iron only <i>pulls</i>. Pull something heavier than you and <i>you</i> move toward it; pull something lighter and it comes to you. Can't sense or affect aluminum. A pulled projectile flies at your face — hence the shield.",
+    cost: "Sensing metal is free while you have any Investiture. Ironpulling costs 1+ Investiture, up to your limit.",
+    attrs: { STR:2, SPD:2, INT:1, WIL:2, AWA:2, PRE:3 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Athletics":2, "Perception":1, "Intimidation":1 },
+    bonusTalent: { name:"Seek Quarry (Hunter key)", note:"Lock onto one target and gain an advantage against them — Lurchers control a single foe." },
+    kit: "Underworld",
+    coverHook: "A Lurcher disarming a room looks like impossible luck to bystanders. Do you play it as luck, or does someone know what you are?",
+    roleNote: "The controller. Removes enemy weapons, denies the battlefield, and hauls the crew (or the loot) where it needs to go."
+  },
+  {
+    id: "pewter", metal: "Pewter", name: "Thug", pillar: "physical",
+    tagline: "Burn pewter and become stronger, faster, tougher, tireless. The crew's muscle.",
+    fantasy: "Also called a Pewterarm. You flood your body with Investiture and become superhuman — enhanced Strength and Speed, no exhaustion, able to shrug off blows that would drop anyone else. Thugs are the most valued bodyguards and soldiers in the Empire. The closest thing this system has to a straightforward fighter.",
+    doInScene: [
+      "<b>Burn for power.</b> Become Enhanced [Strength] and Enhanced [Speed] — bonus equals half the Investiture you spent (round up). Bigger burn, bigger boost.",
+      "<b>Ignore exhaustion.</b> While burning, exhaustion penalties don't apply. Pewter-drag: run for hours, carry impossible loads, keep fighting.",
+      "<b>Hit things.</b> With enhanced Strength your unarmed and weapon attacks land harder. Grappling and improvised weapons are classic Thug style."
+    ],
+    gotcha: "The crash. The moment you <i>stop</i> burning pewter, all the exhaustion you were holding off hits at once. Time your burns — running out mid-fight is how Thugs die.",
+    cost: "Burning pewter costs 1+ Investiture, up to your limit; the more you spend, the bigger the boost. Maintain it round to round.",
+    attrs: { STR:3, SPD:2, INT:1, WIL:2, AWA:1, PRE:3 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Athletics":2, "Heavy Weaponry":2 },
+    bonusTalent: { name:"Vigilant Stance (Warrior key)", note:"A defensive fighting stance — the Thug is the front line." },
+    kit: "Mercenary",
+    coverHook: "A Thug's strength is easy to explain away as just being big and tough — the most cover-friendly power on the crew. Nobody has to know the difference.",
+    roleNote: "The bruiser. The most D&D-familiar package — walk in, hit hard, take hits. Best pick for a rules-nervous player.",
+    easiest: true
+  },
+  {
+    id: "tin", metal: "Tin", name: "Tineye", pillar: "physical",
+    tagline: "Burn tin and your senses go superhuman. See through the mist. Hear a whisper a block away.",
+    fantasy: "Tineyes are the crew's eyes and ears. Burning tin sharpens every sense to a supernatural edge — you pierce Scadrial's mists, hear conversations through walls, spot the tripwire nobody else could. Indispensable scouts and lookouts, and quietly one of the most powerful information-gatherers on any crew.",
+    doInScene: [
+      "<b>Enhanced awareness.</b> Become Enhanced [Awareness]; every sense becomes supernatural. You notice what everyone else misses.",
+      "<b>Pierce the mists.</b> See through Scadrial's night mist and other gaseous Investiture — huge at night, when the crew works.",
+      "<b>Scout & recall.</b> Burning tin sharpens memory of what you sensed; perfect for casing a target or retracing a route."
+    ],
+    gotcha: "Sensory overload. A sudden bright light or loud noise while flaring tin can stagger you. Supernatural senses make you <i>more</i> aware but also more vulnerable to being overwhelmed — a flashbang is a Tineye's nightmare.",
+    cost: "Burning tin costs 1+ Investiture; lasts rounds equal to your Allomancy ranks. Maintain by spending more.",
+    attrs: { STR:1, SPD:3, INT:2, WIL:1, AWA:3, PRE:2 },
+    invFrom: "AWA",
+    skills: { "Allomancy":1, "Perception":2, "Stealth":2 },
+    bonusTalent: { name:"Opportunist (Agent key)", note:"Reroll the plot die once per round — Tineyes turn perception into opportunity." },
+    kit: "Underworld",
+    coverHook: "Nobody sees a Tineye work. Your power is invisible, which makes you the perfect quiet operative — but also means you have to <i>report</i> what you learn to matter.",
+    roleNote: "The scout. Turns every scene's hidden information into the crew's advantage. Low complexity, enormous utility."
+  },
+  {
+    id: "brass", metal: "Brass", name: "Soother", pillar: "spiritual",
+    tagline: "Dampen someone's emotions and they act against them — thinking it was their own idea.",
+    fantasy: "Soothers are the velvet hand of manipulation. Burn brass to <i>damp</i> an emotion in the people near you — Soothe a guard's suspicion until he waves you through, cool a mob's anger, quiet a mark's fear so they stay at the table. Breeze, of Kelsier's crew, is the most feared Soother alive precisely because his touch is so gentle no one notices it.",
+    doInScene: [
+      "<b>Soothe an emotion.</b> Pick an emotion (suspicion, anger, courage) and dampen it in a 10-ft. area. The GM plays how the affected people shift.",
+      "<b>Stay unseen.</b> Make an Allomancy test vs. each target's Spiritual defense to keep them unaware they're being influenced.",
+      "<b>Layer it.</b> Skilled Soothers dampen several emotions at once, steering a whole conversation."
+    ],
+    gotcha: "You can't <i>read</i> emotions, only push them — so you have to learn to read people the ordinary way first. And a target who realizes they're being Soothed can resist, and may figure out you're the source.",
+    cost: "Burning brass costs 1+ Investiture, up to your limit; more spent = harder to resist. Maintain to keep Soothing.",
+    attrs: { STR:1, SPD:2, INT:2, WIL:1, AWA:3, PRE:3 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Insight":2, "Persuasion":2 },
+    bonusTalent: { name:"Rousing Presence (Envoy key)", note:"Make an ally Determined — the Soother is a social operator." },
+    kit: "Noble",
+    coverHook: "Soothing is the ultimate cover power — it works <i>in</i> conversation, invisibly. A noble ballroom, a bribe, a tense negotiation: this is where you shine, and no one ever sees the knife.",
+    roleNote: "The face (subtle). Bends conversations and defuses danger. Perfect for the politically-minded player.",
+    leader: true
+  },
+  {
+    id: "zinc", metal: "Zinc", name: "Rioter", pillar: "spiritual",
+    tagline: "Inflame someone's emotions — stoke a crowd to riot, drive a mark to reckless fear or rage.",
+    fantasy: "Zinc is brass's opposite number: instead of damping emotions you <i>enflame</i> them. Riot a crowd's anger into a distraction-riot, spike a guard's fear until he flees, inflame a rival's pride until he does something stupid. Where the Soother whispers, the Rioter shouts — a blunter, louder instrument of emotional control.",
+    doInScene: [
+      "<b>Riot an emotion.</b> Enflame a chosen emotion in the people near you; the GM plays how they react to the surge.",
+      "<b>Cause a scene.</b> Push a crowd toward panic or anger to create a diversion, clear a path, or start a very useful commotion.",
+      "<b>Read then strike.</b> Gain Advantage with Insight first to learn which emotion gets the reaction you want."
+    ],
+    gotcha: "Loud by nature. A target aware they're being Rioted can spend focus to shake it off — and the GM can spring a Complication where someone realizes what you are. Rioting a crowd is powerful and hard to control.",
+    cost: "Burning zinc costs 1+ Investiture, up to your limit; more spent = harder to resist.",
+    attrs: { STR:1, SPD:2, INT:2, WIL:2, AWA:2, PRE:3 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Insight":1, "Persuasion":1, "Intimidation":1, "Deception":1 },
+    bonusTalent: { name:"Rousing Presence (Envoy key)", note:"Make an ally Determined — the Rioter drives people to act." },
+    kit: "Underworld",
+    coverHook: "A Rioter turns a quiet street into chaos on command. Great for engineering distractions — but a crowd that riots whenever you're around is a pattern someone will eventually notice.",
+    roleNote: "The agitator. Manufactures chaos, distractions, and emotional leverage. The loud counterpart to the Soother.",
+    leader: true
+  },
+  {
+    id: "bronze", metal: "Bronze", name: "Seeker", pillar: "cognitive",
+    tagline: "Feel other Allomancers burning metal. The crew's early-warning system and counter-intelligence.",
+    fantasy: "Seekers hear the rhythmic pulses that Allomancy gives off. Burn bronze and you sense every nearby Allomancer the moment they burn — you can tell a Mistborn from a Misting, a Coinshot from a Soother, and point to where they're standing. Marsh, Kelsier's brother, uses this to hunt through the Steel Ministry itself.",
+    doInScene: [
+      "<b>Detect Allomancy.</b> Sense every use of Investiture in range — who's burning, roughly where, and (with skill) <i>which</i> metal.",
+      "<b>Unmask an Allomancer.</b> The hidden Soother in the ballroom, the Mistborn assassin on the roof — you feel them.",
+      "<b>Counter-espionage.</b> Know when someone's trying to Soothe or Riot your crew, and expose them."
+    ],
+    gotcha: "Bronze senses <i>active</i> Allomancy — it does nothing to a non-Allomancer, and a Smoker's coppercloud can hide burners from you entirely. You're the counter to enemy Allomancers, but only when they're actually burning.",
+    cost: "Burning bronze costs 1+ Investiture; lasts rounds equal to your Allomancy ranks. More spent = more effects you can track at once.",
+    attrs: { STR:1, SPD:2, INT:3, WIL:2, AWA:3, PRE:1 },
+    invFrom: "AWA",
+    skills: { "Allomancy":1, "Deduction":2, "Insight":2 },
+    bonusTalent: { name:"Opportunist (Agent key)", note:"Reroll the plot die once per round — Seekers turn detection into advantage." },
+    kit: "Researcher",
+    coverHook: "A Seeker is the crew's radar in a world where the deadliest enemies are secret Allomancers. Your power is invisible and defensive — the perfect quiet professional.",
+    roleNote: "The radar. Detects and identifies the hidden Allomancers who are the setting's real threats. Pairs with the Smoker as the crew's intelligence pair."
+  },
+  {
+    id: "copper", metal: "Copper", name: "Smoker", pillar: "cognitive",
+    tagline: "Hide the whole crew's Allomancy inside an invisible cloud. And you can't be emotionally manipulated.",
+    fantasy: "Smokers (or Copperclouds) are the crew's shield against detection. Burn copper and you create an invisible cloud that hides every Allomancer inside it from any Seeker. You also become immune to emotional Allomancy — no Soother or Rioter can touch your mind. Clubs runs Kelsier's whole operation partly because his coppercloud keeps the crew invisible.",
+    doInScene: [
+      "<b>Cloak the crew.</b> Create a coppercloud (up to 10-ft. radius) that hides all Allomancy inside it from Seekers. Move and it moves with you.",
+      "<b>Immune to emotion.</b> While burning copper, no Brass or Zinc Allomancy can affect your mind or feelings.",
+      "<b>Safe house on the move.</b> A burning Smoker is a walking blind spot — the crew can burn freely inside your cloud."
+    ],
+    gotcha: "The subtle power. A coppercloud does nothing flashy — its whole job is that nothing happens and no one notices. Very powerful Allomancy (6+ Investiture) can pierce your cloud. And you have to <i>be there</i>, burning, for the crew to benefit.",
+    cost: "Just 1 Investiture to raise a coppercloud; lasts rounds equal to your Allomancy ranks. Cheapest, steadiest burn on the crew.",
+    attrs: { STR:1, SPD:2, INT:3, WIL:3, AWA:1, PRE:2 },
+    invFrom: "PRE",
+    skills: { "Allomancy":1, "Deduction":1, "Discipline":2, "Crafting":1 },
+    bonusTalent: { name:"Erudition (Scholar key)", note:"Bonus, reallocatable skill ranks — the Smoker is the steady hand who runs the shop." },
+    kit: "Artisan",
+    coverHook: "Nobody notices a Smoker — that's the point. You're the least glamorous and most essential person on the crew, the reason everyone else gets away with it.",
+    roleNote: "The protector. Invisible, defensive infrastructure — the crew's safety depends on you. Pairs with the Seeker as the intelligence pair."
+  }
+];
+
+/* Starting-kit summaries, for display. */
+const KITS = {
+  "Underworld": "Two light weapons, leather armor, lockpick, crowbar, 50 ft. rope, lantern, street food. 1d20 boxings.",
+  "Mercenary": "One weapon, uniform & breastplate, crowbar, manacles, magnifying lens, 10 days rations. 2d6 boxings.",
+  "Noble": "A dueling cane + one light weapon, fine clothing, fine drink. A noble-house PATRON who backs you. 4d20 boxings.",
+  "Researcher": "A knife, uniform, ink & 20 sheets, lantern, a reference book, lock & key. Bonus Literature expertise. 3d12 boxings.",
+  "Artisan": "A hammer or light weapon, leather armor, surgical & craft supplies, tuning fork, an instrument, a scale. 4d8 boxings.",
+  "Runaway": "Ragged clothes, nothing else — but you Snapped early and start further along your Allomantic path. No boxings."
+};
+
+/* Level-1 derived stats from attributes + path type. */
+function deriveStats(attrs, isAllomancer, invFrom){
+  const health = 10 + attrs.STR;
+  const focus = 2 + attrs.WIL;
+  const inv = isAllomancer ? (2 + Math.max(attrs.AWA, attrs.PRE)) : null;
+  return {
+    health, focus, inv,
+    physDef: 10 + attrs.STR + attrs.SPD,
+    cogDef: 10 + attrs.INT + attrs.WIL,
+    spiDef: 10 + attrs.AWA + attrs.PRE,
+    move: movementFor(attrs.SPD),
+    lift: liftFor(attrs.STR),
+    recovery: recoveryFor(attrs.WIL),
+    senses: sensesFor(attrs.AWA),
+    expertises: 2 + (attrs.INT > 0 ? attrs.INT : 0)
+  };
+}
+function skillMod(skillName, ranks, attrs){
+  const a = ATTR_OF_SKILL[skillName];
+  return (ranks||0) + (attrs[a]||0);
+}
+
+</script>
+<script>
+/* ===== newdata.js ===== */
+/* ============================================================
+   THE DOSSIER — new content layer (player-safe)
+   Houses, cover identities, and the in-character intake quiz.
+   Setting: Final Empire, ~720 FE (canon-free, pre-Kelsier).
+   ============================================================ */
+
+/* ---- The six Great Houses your crew works among (public faces) ---- */
+const HOUSES = {
+  ostralle: {
+    name: "House Ostralle", metal: "Steel", allo: "Coinshots",
+    face: "An old warrior-house, proud of its steel-blood and its dueling yard. Ostralle sons are soldiers and duelists; the family measures worth in scars and honor. Front-line prestige, thin patience, and a keep that smells of oil and iron.",
+    street: "Skaa here are worked hard and watched by hazekillers. The house guard is everywhere — but soldiers gossip, drink, and can be flattered."
+  },
+  draubel: {
+    name: "House Draubel", metal: "Brass & Zinc", allo: "Soothers & Rioters",
+    face: "A mercantile house that rose on alliances rather than arms. Draubel throws the finest salons in the dominance; its Soothers and Rioters make negotiations go their way and no one can prove it. Velvet on the outside, wire underneath.",
+    street: "Endless parties mean endless serving-work — and endless overheard secrets. A well-placed skaa hears half the dominance's business poured out over wine."
+  },
+  marisel: {
+    name: "House Marisel", metal: "Tin", allo: "Tineyes",
+    face: "A young, hungry house that trades in what it knows. Everyone assumes Marisel hears everything — and Marisel is happy to let them assume it. Maps, ledgers, message-lofts, and a reputation for knowing your business before you do.",
+    street: "Marisel prizes quiet, careful skaa and quietly discards careless ones. The house runs on paper and pigeons, and both pass through skaa hands."
+  },
+  halcorr: {
+    name: "House Halcorr", metal: "(faded)", allo: "once-Mistborn, now diluted",
+    face: "An ancient name gone to seed. Halcorr was famous when the Empire was young — Mistborn blood, they still say — but the line thinned, the coin ran out, and now the keep is half-shuttered, the glory all in the portraits. Land-rich, purse-poor, and touchy about it.",
+    street: "A skeleton staff keeps a crumbling estate. Oversight is thin, records are old and dusty, and a skaa can go unnoticed for years here — which cuts both ways."
+  },
+  corvaine: {
+    name: "House Corvaine", metal: "Bronze", allo: "Seekers",
+    face: "A watchful, bronze-blooded house that holds a caravan contract to the Pits. Corvaine's Seekers listen for Allomancy the way others listen for lies; the family guards its dealings and trusts almost no one. Quietly rich, quietly nervous, quietly armed.",
+    street: "Everything of value is weighed, tallied, and escorted. Skaa near the caravans see real wealth move — and are searched for the privilege."
+  },
+  sevaline: {
+    name: "House Sevaline", metal: "Copper", allo: "Smokers",
+    face: "A pious copper house woven tight into the Steel Ministry. A resident obligator blesses its contracts; devotion is currency here. Sevaline hides things well — that's the family gift — and listens always for the wrong word said too loudly.",
+    street: "Skaa service comes with catechism and curfew. It is the safest house to be invisible in and the most dangerous to be caught in — the Ministry is one room away."
+  }
+};
+
+/* ---- Cover identities. Multiple per house + floats, so five recruits
+        have real choice and can double up. Each is a persona to WEAR
+        over the true (Misting) self. fitsMetals = the app's suggestions,
+        never a lock. ---- */
+const COVERS = [
+  /* OSTRALLE */
+  {
+    id:"blade-oiler", title:"Blade-oiler of the Armory", house:"ostralle",
+    blurb:"You clean, oil, and rack the dueling steel of House Ostralle. You are trusted with edged weapons daily and treated as furniture — nobles duel and boast while you kneel at the whetstone, invisible and listening.",
+    whyTrusted:"Six years without a blade going missing. The armsmaster vouches for your hands.",
+    sell:["The armsmaster is called Sergeant Klem; he is deaf in one ear.","You sharpen left-to-right, always — a habit the duelists know you by.","Ostralle steel is marked with a triple notch on the tang."],
+    neverSay:"Never admit you can tell good steel from bad by feel — that is an Allomancer's tell.",
+    names:["Tarem","Doryn","Sella"], fitsMetals:["steel","iron","pewter"]
+  },
+  {
+    id:"hearth-hauler", title:"Hearth-hauler & Coal Boy", house:"ostralle",
+    blurb:"You haul coal and ash through every corridor of the keep, from the kitchens to the lords' hearths. You have a reason to be in almost any room, at almost any hour, streaked black and beneath notice.",
+    whyTrusted:"Nobody thinks twice about the ash-covered one. You've hauled here since you were small.",
+    sell:["The lord's study hearth is lit at fourth bell, never before.","You answer to the underhousekeeper, Mistress Oret.","You always use the servants' stair by the west larder."],
+    neverSay:"Never let on that you can climb the flue faster than anyone should.",
+    names:["Cobb","Renn","Mena"], fitsMetals:["steel","tin","copper"]
+  },
+  /* DRAUBEL */
+  {
+    id:"salon-server", title:"Salon Server", house:"draubel",
+    blurb:"You pour wine at House Draubel's famous salons. The dominance's business gets negotiated over your trays — alliances, betrayals, debts — while you refill cups and remember everything.",
+    whyTrusted:"You've never spilled and never repeated a word. Draubel's steward hand-picks the salon staff.",
+    sell:["You pour from the right, retreat backward, eyes down.","The steward is Master Halvin; he taps his ring when he wants the room cleared.","Draubel serves its guests Tathingdwell red — you must know the vintages."],
+    neverSay:"Never react to anything said in the room — a Soother's mark stays blank-faced, and so do you.",
+    names:["Lera","Sarn","Kessa"], fitsMetals:["brass","zinc","tin"]
+  },
+  {
+    id:"ledger-copyist", title:"Counting-house Copyist", house:"draubel",
+    blurb:"You copy ledgers and correspondence in Draubel's counting-house — a skaa trusted with letters, which is rare and precious. Numbers and names flow through your ink daily.",
+    whyTrusted:"A skaa who can write and keep his mouth shut is worth more than gold. You are watched, but valued.",
+    sell:["You use oak-gall ink; your script must match the house hand exactly.","Overseer Denn checks your pages against the master each dusk.","You are permitted quills but never allowed to leave with paper."],
+    neverSay:"Never let anyone learn you can read the coded columns — copyists copy, they do not understand.",
+    names:["Ott","Halra","Braid"], fitsMetals:["brass","bronze","copper"]
+  },
+  /* MARISEL */
+  {
+    id:"loft-tender", title:"Message-loft Tender", house:"marisel",
+    blurb:"You keep House Marisel's pigeon loft — the house that trades in knowing things runs its secrets through your birds. Messages come and go through your hands, sealed but not always secret.",
+    whyTrusted:"The birds are healthy and the messages arrive. That's all Marisel asks, and you deliver.",
+    sell:["Marisel's birds wear a green thread on the left leg.","You feed at dawn and dusk; a hungry loft is a suspicious loft.","The loftmaster, Widow Sann, counts the birds twice a day."],
+    neverSay:"Never mention that you can hear a rider coming three streets off — Tineye ears are a death sentence here of all places.",
+    names:["Dov","Mena","Tam"], fitsMetals:["tin","bronze","copper"]
+  },
+  {
+    id:"lamp-tender", title:"Hall Lamp-tender", house:"marisel",
+    blurb:"You trim and light the lamps through every hall and stair of the Marisel keep, room to room, all evening. Few positions give a skaa such natural, constant reason to move through a great house after dark.",
+    whyTrusted:"Reliable, punctual, dull — exactly what they want in someone who is always in the room.",
+    sell:["You carry a taper-pole and a rag; both are your passport anywhere in the keep.","Lamps are lit inner-hall first, then the galleries.","The house forbids open flame in the map-room — you tend its lamps under watch."],
+    neverSay:"Never let a lamp reveal you lingering — a lamp-tender who stops to listen is a lamp-tender dismissed, or worse.",
+    names:["Sella","Grije","Renn"], fitsMetals:["tin","steel","brass"]
+  },
+  /* HALCORR */
+  {
+    id:"estate-caretaker", title:"Caretaker of the Faded Estate", house:"halcorr",
+    blurb:"You keep the shuttered wings of House Halcorr's crumbling keep — dust-sheets, leaking roofs, a family too poor to notice you. Oversight is thin as the family's coin, and the run of the place is very nearly yours.",
+    whyTrusted:"The Halcorrs can barely afford you; they certainly can't afford to question you. You are the one who stays.",
+    sell:["Old Lord Halcorr is near-blind and rarely leaves the east tower.","Half the keep's keys hang on your belt — the other half are lost.","You must know which floors are safe to walk and which will drop you a story."],
+    neverSay:"Never be caught in the sealed portrait gallery — the family guards its old glory even now.",
+    names:["Fenrik","Halra","Doryn","Cobb"], fitsMetals:["copper","iron","bronze"]
+  },
+  {
+    id:"crypt-keeper", title:"Keeper of the Family Crypt", house:"halcorr",
+    blurb:"You tend the Halcorr mausoleum — generations of a once-great line, and the records of who lies where. It is lonely, unwatched work among the dead of a house that used to matter.",
+    whyTrusted:"No one else wants the post. You light the death-lamps and no one checks your work.",
+    sell:["You keep the interment ledger — names, dates, and empty niches waiting.","The crypt is cold; you always carry a second lamp against the dark.","The obligator visits only at the Remembrance, once a year."],
+    neverSay:"Never remark on how many of the old dates don't add up — the dead keep their secrets, and so must you.",
+    names:["Sarn","Mena","Ott"], fitsMetals:["copper","bronze","iron"]
+  },
+  /* CORVAINE */
+  {
+    id:"tally-clerk", title:"Weigh-house Tally Clerk", house:"corvaine",
+    blurb:"You tally the weights of what comes off Corvaine's Pit caravans — crates, coin, and things not named on any manifest. You stand nearest to real wealth of anyone on the crew, and are searched for the privilege every single day.",
+    whyTrusted:"Your tallies have never once been short. Corvaine trusts numbers, and yours are always right.",
+    sell:["Every load is weighed twice, by two clerks, against a sealed master.","The weigh-master, R907 by his Ministry number, trusts no one and says so.","You are body-searched leaving the yard — carry nothing you can't explain."],
+    neverSay:"Never let slip that you can feel a Seeker's pulse in the room — in Corvaine's yard, that is the last thing you'll ever say.",
+    names:["Braid","Kessa","Tam"], fitsMetals:["bronze","copper","brass"]
+  },
+  {
+    id:"caravan-hand", title:"Stableyard Caravan Hand", house:"corvaine",
+    blurb:"You muck stalls and load wagons for the caravans that run Corvaine's contract to the Pits and back. Hard, filthy, mobile work — you come and go with the wagons, which is worth more than the wage.",
+    whyTrusted:"Strong back, no questions, shows up before dawn. The yard-boss keeps the ones who don't complain.",
+    sell:["The yard-boss is called Gratch; he pays in copper clips, weekly.","Caravan dogs know your smell — a stranger's would set them off.","You never touch the sealed crates; that's the guards' work, on pain of the lash."],
+    neverSay:"Never explain how you lifted that axle alone — pewter strength ends a cover fast.",
+    names:["Cobb","Dov","Grije"], fitsMetals:["pewter","iron","steel"]
+  },
+  /* SEVALINE */
+  {
+    id:"chapel-sweep", title:"Chapel Sweep & Candle-tender", house:"sevaline",
+    blurb:"You sweep and light the candles in House Sevaline's private Ministry shrine, one room from a living obligator. It is the safest place in the dominance to be invisible — and the single most dangerous place to be caught being anything else.",
+    whyTrusted:"You know the catechism, you keep the curfew, and you never miss a Remembrance. The obligator has learned your face and approves of it.",
+    sell:["The resident obligator is Prelan Veth; he expects you to bow, not speak.","Candles are lit before dawn devotions and snuffed after; never let one gutter.","You must recite the opening catechism if asked — get it wrong and you're finished."],
+    neverSay:"Never, ever let a Seeker feel you burn in this house — you are a room away from the Ministry itself.",
+    names:["Lera","Halra","Renn"], fitsMetals:["copper","brass","tin"]
+  },
+  {
+    id:"almoner-help", title:"Almoner's Helper", house:"sevaline",
+    blurb:"You help distribute House Sevaline's ritual rations to its skaa — bread, and the doctrine that comes with it. You move among every skaa the house owns and know their names, their hungers, and their grudges.",
+    whyTrusted:"The almoner needs a skaa the other skaa will take bread from without fear. That's you.",
+    sell:["Rations go out after the noon devotion, never before.","You answer to Sister Ollnet, who counts every loaf.","You must bless each portion with the short grace — skip it and someone reports you."],
+    neverSay:"Never be seen giving extra to your own — favoritism is how an almoner's helper is unmasked.",
+    names:["Mena","Sarn","Kessa"], fitsMetals:["brass","zinc","copper"]
+  },
+  /* FLOATS — not tied to one house; good for mobile PCs or doubling up */
+  {
+    id:"canal-loader", title:"Canal-boat Loader", house:"float",
+    blurb:"You load and unload the narrowboats that move goods between every keep and the markets. You belong on every dock in the city and are tied to none — the most mobile cover a crew can wear.",
+    whyTrusted:"Dock-crews take all comers who can lift; a strong stranger is just another back.",
+    sell:["You know the bell-signals that call boats to a wharf.","Canal water runs black with ash by midday — everyone downstream is filthy, so are you.","The dockmaster changes weekly; nobody tracks a loader's face."],
+    neverSay:"Never be seen crossing the city faster than a boat could carry you.",
+    names:["Grije","Cobb","Tam"], fitsMetals:["steel","pewter","iron"]
+  },
+  {
+    id:"ash-sweep", title:"Ashfall Street-sweeper", house:"float",
+    blurb:"You sweep the endless ash from the streets and gutters, dawn to dusk, in every quarter. No one in the Final Empire is more invisible than the one clearing the ash — you are scenery that moves.",
+    whyTrusted:"The city always needs sweepers and never remembers one. You are hired by the ward, not the house.",
+    sell:["Ash falls heaviest before dawn; the good sweepers are out first.","You push toward the storm-drains; the grates are your landmarks.","Sweepers wear a rag mask against the ash — no one will find it strange that yours hides your face."],
+    neverSay:"Never be somewhere a sweeper has no reason to be — invisibility only holds where the broom belongs.",
+    names:["Doryn","Sella","Ott"], fitsMetals:["tin","copper","zinc"]
+  }
+];
+
+/* ---- Heroic-path flavor, for intake suggestions ---- */
+const PATHS = {
+  Warrior:"the one the crew forms up on — steady, hard to put down.",
+  Agent:"quick hands and quicker luck; gets in and out.",
+  Envoy:"the crew's mouth; moves people with words.",
+  Hunter:"locks onto a target and does not let go.",
+  Scholar:"out-thinks the job before it starts.",
+  Leader:"the one others come to orbit — earned, not assigned."
+};
+
+/* ============================================================
+   THE INTAKE — an in-character aptitude interview.
+   Answers weight metals; each carries a path/cover lean and a
+   backstory SEED. The network is 'assessing a recruit'.
+   Everything it returns is a SUGGESTION the recruit can override.
+   ============================================================ */
+const QUIZ = [
+  {
+    q:"The mists have risen and you're out past curfew when a patrol turns the corner ahead. Instinct?",
+    a:[
+      { t:"Up. Rooftop, gutter, anything vertical — be gone before they look up.", w:{steel:3,tin:1}, path:"Agent", seed:"has run the mist-dark rooftops since childhood" },
+      { t:"Into the crowd's shadow. Still, silent, let their eyes slide past.", w:{copper:2,tin:2}, path:"Agent", seed:"learned young how to not be seen" },
+      { t:"Walk straight at them like you belong there, and talk.", w:{brass:3,zinc:1}, path:"Envoy", seed:"has talked their way past more guards than they can count" },
+      { t:"Stand your ground. If it goes wrong, it goes wrong on your terms.", w:{pewter:3,iron:1}, path:"Warrior", seed:"has never once run from a fight, for better or worse" }
+    ]
+  },
+  {
+    q:"A crewmate is about to be caught. You have one heartbeat to act. You—",
+    a:[
+      { t:"Rip the guard's weapon out of his hand from across the alley.", w:{iron:3,steel:1}, path:"Hunter", seed:"once saved someone by a hair's breadth, and never forgot the weight of it" },
+      { t:"Cool the guard's suspicion until he simply loses interest.", w:{brass:3}, path:"Envoy", seed:"protects people quietly, so they never know how close it was" },
+      { t:"Start a commotion down the street — every head turns the wrong way.", w:{zinc:3,tin:1}, path:"Agent", seed:"is very good at making the wrong thing happen at the right time" },
+      { t:"Put your own body between them. Take the hit.", w:{pewter:3}, path:"Warrior", seed:"would rather bleed than watch someone they owe get taken" }
+    ]
+  },
+  {
+    q:"The crew needs to know what's inside a keep before the job. Your instinct is to—",
+    a:[
+      { t:"Get close and let your senses do the rest — you'll hear and see what no one else can.", w:{tin:3}, path:"Agent", seed:"notices the detail everyone else walks past" },
+      { t:"Feel out whether any Allomancers are inside, and what kind.", w:{bronze:3}, path:"Scholar", seed:"trusts what they can sense over what they're told" },
+      { t:"Read the people who work there until one of them tells you everything, gladly.", w:{brass:2,zinc:2}, path:"Envoy", seed:"can make a stranger feel like an old friend in minutes" },
+      { t:"Study every record, map, and rumor until the plan is obvious.", w:{bronze:1,copper:1}, path:"Scholar", seed:"would rather plan for a week than improvise for an hour" }
+    ]
+  },
+  {
+    q:"What do people who cross you learn, too late?",
+    a:[
+      { t:"That the thing in their hand is suddenly in yours.", w:{iron:3}, path:"Hunter", seed:"takes away what an enemy relies on, then watches them flail" },
+      { t:"That they were never as unafraid as they felt a moment ago.", w:{zinc:2,brass:1}, path:"Envoy", seed:"knows exactly which feeling to reach for" },
+      { t:"That you don't go down, and you don't stop coming.", w:{pewter:2,iron:1}, path:"Warrior", seed:"has a reputation for being impossible to finish off" },
+      { t:"That you already knew their secret before they opened their mouth.", w:{bronze:2,tin:1}, path:"Scholar", seed:"collects other people's secrets the way others collect coin" }
+    ]
+  },
+  {
+    q:"The crew's safety on a job depends most on—",
+    a:[
+      { t:"No one knowing we were ever there.", w:{copper:3}, path:"Scholar", seed:"is the reason the rest of the crew gets away with it, unthanked" },
+      { t:"Someone watching the dark for what's coming.", w:{tin:2,bronze:1}, path:"Hunter", seed:"keeps the first watch and the last, every time" },
+      { t:"Someone who can end a fight fast if it starts.", w:{pewter:2,steel:1}, path:"Warrior", seed:"is the crew's answer when talking stops working" },
+      { t:"Someone keeping the marks calm and the mood right.", w:{brass:2,zinc:1}, path:"Envoy", seed:"reads a room's temperature before anyone else feels the chill" }
+    ]
+  },
+  {
+    q:"When the plan falls apart mid-job — and it will — you want to be the one who—",
+    a:[
+      { t:"Makes an exit appear where there wasn't one.", w:{steel:3}, path:"Agent", seed:"has a gift for finding the way out no one else saw" },
+      { t:"Turns the chaos into a cover and slips through it.", w:{zinc:2,copper:1}, path:"Agent", seed:"is never more comfortable than when everything's on fire" },
+      { t:"Holds the line so everyone else can move.", w:{pewter:2,iron:1}, path:"Warrior", seed:"is the last one out, always" },
+      { t:"Sees the new shape of it fastest and calls the next move.", w:{bronze:1,tin:1}, path:"Leader", seed:"stays coldest when everyone else is losing their heads" }
+    ]
+  },
+  {
+    q:"Why did you say yes when the network came for you?",
+    a:[
+      { t:"Because they knew what I was before I did, and offered me a place anyway.", w:{copper:1,bronze:1}, path:"Scholar", seed:"came to the crew out of a hunger to finally belong somewhere" },
+      { t:"Because I owe someone a debt I mean to pay in full.", w:{pewter:1,iron:1}, path:"Warrior", seed:"carries a debt that drives every choice they make" },
+      { t:"Because the Final Empire took something from me and I want it back.", w:{zinc:1,steel:1}, path:"Hunter", seed:"lost something to the Empire and has never stopped hunting for it" },
+      { t:"Because I'm good at this, and it's the only place that will ever let me prove it.", w:{brass:1,tin:1}, path:"Agent", seed:"has skills the daylight world would kill them for having" }
+    ]
+  },
+  {
+    q:"Last thing. When you finally Snapped and the power woke — what was that moment like?",
+    a:[
+      { t:"Sudden freedom. The world opened up and I could move through it.", w:{steel:2,pewter:1}, seed:"remembers the Snap as the first time they ever felt free" },
+      { t:"Sudden clarity. Everything got sharp, loud, close.", w:{tin:2,bronze:1}, seed:"remembers the Snap as the world getting unbearably vivid" },
+      { t:"Sudden quiet. A stillness no one could reach into anymore.", w:{copper:2,brass:1}, seed:"remembers the Snap as a door closing between them and everyone else" },
+      { t:"Sudden power over the room. For once, they felt me.", w:{zinc:2,iron:1}, seed:"remembers the Snap as the first time the world flinched from them" }
+    ]
+  }
+];
+
+/* score the quiz -> { ranked:[{id,score}], topMetals:[id,id], path, seeds:[] } */
+function scoreQuiz(answers){ // answers: array of chosen option objects
+  const tally = {}; const pathTally = {}; const seeds = [];
+  MISTINGS.forEach(m=> tally[m.id]=0);
+  answers.forEach(opt=>{
+    if(!opt) return;
+    Object.entries(opt.w||{}).forEach(([k,v])=> tally[k]=(tally[k]||0)+v);
+    if(opt.path) pathTally[opt.path]=(pathTally[opt.path]||0)+1;
+    if(opt.seed) seeds.push(opt.seed);
+  });
+  const ranked = Object.entries(tally).map(([id,score])=>({id,score})).sort((a,b)=> b.score-a.score);
+  const topMetals = ranked.filter(r=>r.score>0).slice(0,3).map(r=>r.id);
+  const path = Object.entries(pathTally).sort((a,b)=> b[1]-a[1])[0]?.[0] || null;
+  return { ranked, topMetals: topMetals.length?topMetals:[ranked[0].id], path, seeds };
+}
+
+</script>
+<script>
+/* ===== appfolder.js ===== */
+/* ============================================================
+   THE DOSSIER — folder controller
+   A recruit's case file: Intake · Dossier · Cover · Ledger ·
+   Journal · Crew · Sealed. Autosaves per browser; exports a
+   self-contained JSON (still importable by the Crewleader view)
+   and a printable dossier.
+   ============================================================ */
+const LS_ACTIVE = "dossier_active_v2";
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const elx = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function toast(msg){ const t=$("#toast"); if(!t)return; t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2600); }
+const metalById = id => MISTINGS.find(m=>m.id===id);
+const coverById = id => COVERS.find(c=>c.id===id);
+
+/* ---------- state ---------- */
+function blankDossier(){
+  return { player:"", charName:"", quiz:{answers:[], idx:0, done:false},
+    metalId:null, path:null, coverId:null, personaName:"",
+    backstory:{snap:"", seeds:[], notes:""},
+    ledger:{boxings:"", items:[]},
+    journal:{relationships:"", log:[]},
+    crew:[], sealed:"", sealedHidden:false, filed:null };
+}
+let D = load();
+function load(){ try{ const r=localStorage.getItem(LS_ACTIVE); if(r){ return Object.assign(blankDossier(), JSON.parse(r)); } }catch(e){} return blankDossier(); }
+function save(){ try{ localStorage.setItem(LS_ACTIVE, JSON.stringify(D)); }catch(e){ toast("Couldn't autosave — storage may be blocked."); } }
+
+let TAB = "intake";
+const TABS = [
+  ["intake","Intake","Form C-7"],
+  ["dossier","Dossier","Sheet"],
+  ["combat","Combat","In the Fray"],
+  ["cover","Cover","Papers"],
+  ["ledger","Ledger","Accounts"],
+  ["journal","Journal","Field notes"],
+  ["crew","Crew","Contacts"],
+  ["sealed","Sealed","Eyes only"]
+];
+
+/* ============================================================
+   SHELL
+   ============================================================ */
+function renderShell(){
+  const app = $("#app");
+  const done = D.metalId ? metalById(D.metalId) : null;
+  app.innerHTML = `
+   <div class="folder">
+     <div class="tabs">
+       ${TABS.map(([id,label,sub])=>`
+         <button class="ftab ${TAB===id?'active':''} ${tabReady(id)?'':'pending'}" data-tab="${id}">
+           <span class="ftab-l">${label}</span><span class="ftab-s">${sub}</span>
+         </button>`).join("")}
+     </div>
+     <div class="sheet-paper" id="paper"></div>
+   </div>`;
+  $$(".ftab").forEach(b=> b.onclick=()=>{ TAB=b.dataset.tab; renderShell(); });
+  renderTab();
+}
+function tabReady(id){
+  if(id==="dossier"||id==="cover"||id==="ledger") return !!D.metalId;
+  return true;
+}
+
+function renderTab(){
+  const p = $("#paper");
+  if(TAB==="intake") return renderIntake(p);
+  if(TAB==="dossier") return renderDossier(p);
+  if(TAB==="combat") return renderCombat(p);
+  if(TAB==="cover") return renderCover(p);
+  if(TAB==="ledger") return renderLedger(p);
+  if(TAB==="journal") return renderJournal(p);
+  if(TAB==="crew") return renderCrew(p);
+  if(TAB==="sealed") return renderSealed(p);
+}
+
+/* small shared header for each document */
+function docHead(title, stamp){
+  const who = D.charName ? esc(D.charName) : "UNNAMED RECRUIT";
+  return `<div class="dochead">
+    <div class="dh-left"><div class="dh-org">THE NETWORK · Recruitment</div><div class="dh-title">${title}</div></div>
+    <div class="dh-right"><div class="stamp ${stamp?.cls||''}">${stamp?.txt||"CONFIDENTIAL"}</div><div class="dh-file">FILE: ${who}</div></div>
+  </div>`;
+}
+
+/* ============================================================
+   INTAKE  (the quiz + results + manual pick)
+   ============================================================ */
+function renderIntake(p){
+  const q = D.quiz;
+  if(!q.done && q.idx>=0 && q.answers.filter(Boolean).length < QUIZ.length && q.started){
+    return renderQuizStep(p);
+  }
+  if(q.done || D.metalId){
+    return renderIntakeResult(p);
+  }
+  // welcome
+  p.innerHTML = docHead("Personality &amp; Aptitude Intake", {txt:"NEW RECRUIT",cls:"blue"}) + `
+    <div class="intake-welcome">
+      <p class="lede">You've been selected because we track people like you — the ones who Snapped in the dark and told no one. You are safe here. In exchange, the network asks only that you help us place you well.</p>
+      <p>Fill out this short intake honestly. From your answers we'll suggest the shape of your gift and fit you with a <b>cover identity</b> to wear in the noble houses. Nothing here is binding — you may overrule any suggestion, or skip straight to choosing for yourself.</p>
+      <div class="namebar">
+        <label>Recruit name (your character) <input id="in-name" value="${esc(D.charName)}" placeholder="who you'll be in the crew"></label>
+        <label>Player (for the Crewleader) <input id="in-player" value="${esc(D.player)}" placeholder="your name"></label>
+      </div>
+      <div class="intake-actions">
+        <button class="btn primary" id="start-quiz">Begin the intake →</button>
+        <button class="btn ghost" id="skip-quiz">Skip — let me choose my metal myself</button>
+      </div>
+      <p class="fineprint">The Final Empire keeps its own records of you. This one is ours — and yours.</p>
+    </div>`;
+  $("#in-name").oninput = e=>{ D.charName=e.target.value; save(); };
+  $("#in-player").oninput = e=>{ D.player=e.target.value; save(); };
+  $("#start-quiz").onclick = ()=>{ D.quiz={answers:[], idx:0, done:false, started:true}; save(); renderShell(); };
+  $("#skip-quiz").onclick = ()=>{ D.quiz.done=true; save(); renderShell(); };
+}
+
+function renderQuizStep(p){
+  const q = D.quiz, i = q.idx, item = QUIZ[i];
+  const chosen = q.answers[i];
+  p.innerHTML = docHead("Aptitude Interview", {txt:`ITEM ${i+1}/${QUIZ.length}`,cls:"blue"}) + `
+    <div class="quiz">
+      <div class="qbar"><div class="qbar-fill" style="width:${Math.round((i)/QUIZ.length*100)}%"></div></div>
+      <div class="qnum">Question ${i+1} of ${QUIZ.length}</div>
+      <div class="qtext">${item.q}</div>
+      <div class="qopts">
+        ${item.a.map((o,idx)=>`<button class="qopt ${chosen===idx?'sel':''}" data-opt="${idx}">${o.t}</button>`).join("")}
+      </div>
+      <div class="quiz-nav">
+        <button class="btn ghost" id="q-back" ${i===0?'disabled':''}>← Back</button>
+        <button class="btn ghost small" id="q-abort">Skip the interview</button>
+      </div>
+    </div>`;
+  $$(".qopt").forEach(b=> b.onclick=()=>{
+    q.answers[i] = parseInt(b.dataset.opt,10);
+    if(i+1 < QUIZ.length){ q.idx=i+1; save(); renderShell(); }
+    else { q.done=true; save(); renderShell(); }
+  });
+  $("#q-back").onclick = ()=>{ if(i>0){ q.idx=i-1; save(); renderShell(); } };
+  $("#q-abort").onclick = ()=>{ q.done=true; save(); renderShell(); };
+}
+
+function renderIntakeResult(p){
+  // compute from answers if we have them
+  const answered = D.quiz.answers.map((ai,qi)=> (ai!=null? QUIZ[qi].a[ai] : null)).filter(Boolean);
+  let result = null;
+  if(answered.length){ result = scoreQuiz(answered); }
+  // seed backstory once
+  if(result && (!D.backstory.seeds || !D.backstory.seeds.length)){ D.backstory.seeds = result.seeds.slice(); save(); }
+
+  let head = docHead("Intake Assessment", {txt:"PROCESSED",cls:"red"});
+  let body = "";
+
+  if(result){
+    const top = result.topMetals.map(metalById);
+    body += `<p class="assess-lede">Assessment complete. Based on your answers, the network reads you as a natural fit for the following. These are our best guess, recruit — the choice is yours.</p>`;
+    body += `<div class="assess-suggest">`;
+    top.forEach((m,idx)=>{
+      body += `<div class="sug ${D.metalId===m.id?'picked':''}">
+        <div class="sug-rank">${idx===0?'Strongest':'Also strong'}</div>
+        <div class="sug-metal">${m.name} <span class="sug-sub">· burns ${m.metal}</span></div>
+        <div class="sug-tag">${m.tagline}</div>
+        <button class="btn small ${D.metalId===m.id?'primary':''}" data-adopt="${m.id}">${D.metalId===m.id?'✓ Chosen':'Choose '+m.name}</button>
+      </div>`;
+    });
+    body += `</div>`;
+    if(result.path && PATHS[result.path]){
+      body += `<div class="assess-path"><span class="lbl">Suggested heroic path:</span> <b>${result.path}</b> — ${PATHS[result.path]} <span class="muted">(flavor + your bonus talent; not binding)</span></div>`;
+    }
+    if(D.backstory.seeds.length){
+      body += `<div class="assess-seeds"><div class="lbl">Backstory threads the network noted (edit these anytime in your Journal):</div><ul>${D.backstory.seeds.map(s=>`<li>…${esc(s)}.</li>`).join("")}</ul></div>`;
+    }
+  } else {
+    body += `<p class="assess-lede">No interview on file — that's fine. Choose the gift that calls to you.</p>`;
+  }
+
+  // full metal grid (always available — override / manual pick)
+  body += `<div class="grid-label">All eight gifts — pick any (more than one recruit may share a metal):</div>`;
+  body += `<div class="metal-grid">`;
+  MISTINGS.forEach(m=>{
+    body += `<button class="mcard ${D.metalId===m.id?'picked':''}" data-adopt="${m.id}">
+      <div class="mc-name">${m.name}</div>
+      <div class="mc-metal">${m.metal}</div>
+      <div class="mc-tag">${m.tagline}</div>
+      ${m.easiest?'<span class="mc-badge">easy start</span>':''}
+    </button>`;
+  });
+  body += `</div>`;
+  body += `<div class="intake-actions"><button class="btn ghost small" id="redo">↺ Retake the interview</button>
+    ${D.metalId?`<button class="btn primary" id="to-dossier">Open my Dossier →</button>`:''}</div>`;
+
+  p.innerHTML = head + body;
+  $$("[data-adopt]").forEach(b=> b.onclick=()=> adoptMetal(b.dataset.adopt, result));
+  $("#redo").onclick = ()=>{ D.quiz={answers:[], idx:0, done:false, started:true}; save(); renderShell(); };
+  const td=$("#to-dossier"); if(td) td.onclick=()=>{ TAB="dossier"; renderShell(); };
+}
+
+function adoptMetal(id, result){
+  D.metalId = id;
+  if(result && result.path && !D.path) D.path = result.path;
+  // prime ledger from kit if empty
+  const m = metalById(id);
+  if(m && (!D.ledger.items || !D.ledger.items.length)){
+    D.ledger.items = kitItems(m.kit);
+    D.ledger.boxings = D.ledger.boxings || "";
+  }
+  save();
+  toast(`Gift chosen: ${m.name} (${m.metal}).`);
+  TAB="dossier"; renderShell();
+}
+
+/* ============================================================
+   DOSSIER  (the auto-calc sheet — the true self)
+   ============================================================ */
+function renderDossier(p){
+  if(!D.metalId){ return notYet(p, "Dossier", "Complete your Intake and choose a gift first — then your sheet fills itself in."); }
+  const m = metalById(D.metalId);
+  const a = m.attrs, stats = deriveStats(a, true, m.invFrom);
+  let s = docHead("Operative Dossier — Level 1", {txt:"TRUE FILE",cls:"red"});
+  s += `<div class="namebar tight">
+      <label>Name <input id="d-name" value="${esc(D.charName)}" placeholder="your name in the crew"></label>
+      <label>Player <input id="d-player" value="${esc(D.player)}" placeholder="you"></label>
+    </div>`;
+  s += `<div class="dossier-grid">`;
+
+  // LEFT: the power
+  s += `<div class="col">
+    <div class="metal-head"><div class="mh-name">${m.name}</div><div class="mh-metal">burns ${m.metal} · ${m.pillar} pillar</div></div>
+    <p class="fantasy">${m.fantasy}</p>
+    <div class="block-label">What you do in a scene</div><ul class="do-list">${m.doInScene.map(d=>`<li>${d}</li>`).join("")}</ul>
+    <div class="gotcha"><span class="lbl">The catch</span>${m.gotcha}</div>
+    <p class="cost">${m.cost}</p>
+    <div class="cover-hook"><span class="lbl">Wearing a cover</span>${m.coverHook}</div>
+  </div>`;
+
+  // RIGHT: the numbers
+  s += `<div class="col">
+    <div class="sheet">
+      <h4>Level-1 sheet — filled for you</h4>
+      <div class="attr-grid">
+        ${[["STR",a.STR],["SPD",a.SPD],["INT",a.INT],["WIL",a.WIL],["AWA",a.AWA],["PRE",a.PRE]].map(([k,v])=>`<div class="attr"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("")}
+      </div>
+      <div class="derived">
+        ${drow("Health",stats.health)}${drow("Focus",stats.focus)}${drow("Investiture",stats.inv+" (from "+m.invFrom+")",true)}
+        ${drow("Phys. Def",stats.physDef)}${drow("Cog. Def",stats.cogDef)}${drow("Spir. Def",stats.spiDef)}
+        ${drow("Move",stats.move+" ft")}${drow("Recovery",stats.recovery)}${drow("Senses",stats.senses)}${drow("Expertises",stats.expertises)}
+      </div>
+      <div class="block-label" style="margin-top:8px">Skills (rank → modifier)</div>
+      <div class="skills-mini">
+        ${Object.entries(m.skills).map(([sk,rk])=>`<div class="srow"><span class="sn">${sk}<span class="ranks">${rk===1?'1 rank':rk+' ranks'}</span></span><span class="sm">${(skillMod(sk,rk,a)>=0?'+':'')}${skillMod(sk,rk,a)}</span></div>`).join("")}
+      </div>
+      <div class="talent-line"><span class="tn">${m.metal} Misting (Snap key)</span><span class="td">Gain Allomancy, an Investiture pool, and your one power. Plus a bonus talent (human ancestry):</span></div>
+      <div class="talent-line"><span class="tn">${m.bonusTalent.name}</span><span class="td">${m.bonusTalent.note}</span></div>
+      <div class="kit-line"><b>Starting kit — ${m.kit}:</b> ${KITS[m.kit]||""}</div>
+      <div class="kit-line" style="margin-top:6px"><b>Alt — Runaway:</b> ${KITS["Runaway"]} <i>(early-Snap head start, no gear)</i></div>
+    </div>
+  </div>`;
+  s += `</div>`;
+
+  // backstory / snap
+  s += `<div class="block-label" style="margin-top:22px">Who you are under the cover</div>
+    <div class="backstory">
+      <label class="fld"><span>How you Snapped</span><textarea id="d-snap" rows="2" placeholder="the hard moment that woke your power — Allomancy sleeps until trauma triggers it">${esc(D.backstory.snap)}</textarea></label>
+      ${D.backstory.seeds.length?`<div class="seedbox"><span class="lbl">Threads from your intake (yours to keep, cut, or rewrite):</span><ul>${D.backstory.seeds.map((s2,i)=>`<li>…${esc(s2)}. <button class="linkx" data-cutseed="${i}">cut</button></li>`).join("")}</ul></div>`:''}
+      <label class="fld"><span>Anything else the crew should know</span><textarea id="d-notes" rows="2" placeholder="family, a debt, what you want out of this">${esc(D.backstory.notes)}</textarea></label>
+    </div>`;
+
+  p.innerHTML = s;
+  $("#d-name").oninput=e=>{D.charName=e.target.value; save();};
+  $("#d-player").oninput=e=>{D.player=e.target.value; save();};
+  $("#d-snap").oninput=e=>{D.backstory.snap=e.target.value; save();};
+  $("#d-notes").oninput=e=>{D.backstory.notes=e.target.value; save();};
+  $$("[data-cutseed]").forEach(b=> b.onclick=()=>{ D.backstory.seeds.splice(parseInt(b.dataset.cutseed,10),1); save(); renderTab(); });
+}
+function drow(k,v,hl){ return `<div class="d${hl?' hl':''}"><span class="dk">${k}</span><span class="dv">${v}</span></div>`; }
+
+/* ============================================================
+   COMBAT  (field guide — how a fight, or a heist, actually runs)
+   Player-facing, deliberately short. Reframed for the setting;
+   costs are simplified for table speed (see fine print).
+   ============================================================ */
+const MOVES = [
+  {
+    name:"Strike", cost:"1 move",
+    body:"Attack with a weapon or your bare hands against the target's Physical defense. The move under a sword-swing, a thrown knife, a haymaker.",
+    ex:"“I put the knife into his shoulder” — Light Weaponry vs. his Physical defense."
+  },
+  {
+    name:"Use a Skill", cost:"1 move",
+    body:"Roll any skill that fits what you're doing against the matching defense (or DC). This is the one doing double duty — a lock, a guard, a wound, a search, resolved exactly like a punch.",
+    ex:"“I'm picking the lock” — Thievery vs. the lock's defense. “I'm slipping past him” — Stealth vs. his Perception."
+  },
+  {
+    name:"Set It Up", cost:"1 move",
+    body:"Use any skill to gain the upper hand — a feint, a read, a clever angle — against the target's matching defense. Win, and <i>your own</i> next test against that same target, using a different skill, rolls with Advantage.",
+    ex:"“I guess which way he'll dodge” — Deduction vs. his defense, so your own follow-up Strike on him rolls twice."
+  },
+  {
+    name:"Aid", cost:"Reaction · 1 Focus",
+    body:"Not your move — spend it helping someone else, on their turn. Right before an ally rolls, spend 1 Focus to hand them Advantage. You just need to be close enough to plausibly help.",
+    ex:"“I'm shouting the guard patterns up to her” — said before she rolls, not after."
+  },
+  {
+    name:"Brace", cost:"1 move, no roll",
+    body:"Get behind real cover (or raise a shield) within reach. Attacks against you have Disadvantage — until you attack or move, which ends it instantly.",
+    ex:"The moment you're outnumbered and need one round to not get hit."
+  },
+  {
+    name:"Disengage", cost:"1 move, no roll",
+    body:"Step 5 ft. back without inviting a free hit on the way out. The move that gets you off the X.",
+    ex:"Backing out of melee to line up a Coinshot's next push."
+  },
+  {
+    name:"Grapple", cost:"2 moves",
+    body:"Roll Athletics against the target's Physical defense. Win, and they're Restrained — stuck, until they slip free, you choose to let go, or you drop them.",
+    ex:"Pinning the one witness you need alive and talking."
+  }
+];
+function renderCombat(p){
+  let s = docHead("Field Guide — When It Comes to a Fight", {txt:"KEEP MOVING",cls:"green"});
+  s += `<p class="assess-lede">Best combat advice in the Final Empire: keep it moving. This is the whole system in the fewest words that still tell the truth — enough to play fast, not enough to bury you in tables mid-scene.</p>`;
+
+  s += `<div class="block-label">The one decision every round</div>`;
+  s += `<div class="combat-two">
+      <div class="combat-choice"><div class="cc-when">Act early · 2 moves</div><h4>Go Fast</h4>
+        <p>You act before most of the table, but only get two moves out of it. Pick this when you're the one <i>making</i> something happen — the first blow, the door you need shut before it opens.</p></div>
+      <div class="combat-choice"><div class="cc-when">Act late · 3 moves</div><h4>Go Slow</h4>
+        <p>You wait until you've seen what everyone else — allies and enemies — just did, and get three moves for the patience. Pick this when you're <i>reacting</i> to what just happened.</p></div>
+    </div>`;
+  s += `<p class="small muted">Rule of thumb, so you never freeze on it: making something happen → Fast. Answering what just happened → Slow. There's no wrong pick — say one and go.</p>`;
+
+  s += `<div class="cover-hook" style="margin-top:16px"><span class="lbl">Your reaction</span>You get one Reaction the moment combat starts (skip it if you're caught flat-footed — Surprised), and a fresh one at the start of every one of your own turns after that. You only ever hold one — spend it whenever, even off your turn (cutting off an escape, catching a falling ally, Aiding a teammate's roll), and it's gone until your next turn refills it.</div>`;
+
+  s += `<div class="block-label" style="margin-top:20px">What a roll actually gets you</div>`;
+  s += `<div class="sheet"><h4>One roll, every time — fight or heist</h4>
+      <p class="small" style="margin:0 0 10px">d20 + your skill, against their defense (or the lock's, or the lie's). Four ways it can land:</p>
+      <div class="derived roll-outcomes">
+        ${drow("Miss, nothing spent","Nothing happens — describe the near-thing and move on")}
+        ${drow("Miss + spend 1 Focus","A Graze: it still lands, raw damage only, no frills",true)}
+        ${drow("Hit","Full damage — your dice plus your bonus")}
+        ${drow("Hit + spend an Opportunity","A Crit: everything goes exactly right — max damage",true)}
+      </div>
+      <p class="small muted" style="margin-top:8px">An Opportunity comes from the plot die (when your Guardian raises the stakes) or from rolling a natural 20 outright — no plot die needed for that part.</p>
+    </div>`;
+
+  s += `<div class="cover-hook" style="margin-top:16px"><span class="lbl">Two kinds of fights</span>Not every fight is violent — this exact engine runs your heists too. "Use a Skill" is doing double duty: a lock, a guard, a lie, all resolved the same way as a punch.
+      <div class="fineprint" style="margin-top:8px">In small print, because it matters at the table: a lock is Thievery vs. its defense. A guard's back is Stealth vs. their Perception. A checkpoint lie is Deception vs. their Insight. Same roll, same four outcomes above — just no blood.</div>
+    </div>`;
+
+  s += `<div class="block-label" style="margin-top:20px">Your moves</div>`;
+  s += `<div class="move-grid">${MOVES.map(mv=>`
+      <div class="movecard"><h4>${mv.name}</h4><span class="mv-cost">${mv.cost}</span>
+        <p>${mv.body}</p><div class="mv-ex">${mv.ex}</div></div>`).join("")}
+    </div>`;
+
+  if(D.metalId){
+    const m = metalById(D.metalId);
+    s += `<div class="block-label" style="margin-top:20px">Your gift, in the fray</div>`;
+    s += `<div class="backstory"><p class="small" style="margin:0 0 8px">Your dossier already spells this out — these are your Strikes and Use-a-Skills, just reskinned for ${m.metal}:</p><ul class="do-list">${m.doInScene.map(d=>`<li>${d}</li>`).join("")}</ul></div>`;
+  }
+
+  s += `<div class="gotcha" style="margin-top:18px"><span class="lbl">Keep the table moving</span>Say what you're trying to do, then roll — don't pre-calculate every option first. Stuck between two moves? Ask "am I trying to hurt them, get past them, or set something up?" That's the whole test. And a natural 20 is always an Opportunity, a natural 1 always a Complication — on any roll, plot die or not.</div>`;
+
+  s += `<p class="fineprint">This covers the seven moves that come up most at your table. The Handbook (Ch. 10) also has Ready, Recover, Shove, Avoid Danger, Dodge, Reactive Strike, and a few free actions (Interact, Move, Banter, Drop) — ask your Guardian if a scene needs one of those.</p>`;
+
+  p.innerHTML = s;
+}
+
+/* ============================================================
+   COVER  (assigned persona — the lie you wear)
+   ============================================================ */
+function renderCover(p){
+  if(!D.metalId){ return notYet(p,"Cover Papers","Choose your gift first — the network assigns a cover to fit it."); }
+  const m = metalById(D.metalId);
+  const fits = COVERS.filter(c=> c.fitsMetals.includes(D.metalId));
+  const chosen = D.coverId ? coverById(D.coverId) : null;
+
+  let s = docHead("Cover Identity — Assigned Papers", {txt:"FORGED",cls:"amber"});
+  if(chosen){
+    const h = HOUSES[chosen.house] || {name:"Unaffiliated (float)", face:"You belong to no single house — you move through the city's open work.", street:""};
+    const persona = D.personaName || chosen.names[0];
+    s += `<div class="papers">
+      <div class="papers-top">
+        <div>
+          <div class="p-role">${chosen.title}</div>
+          <div class="p-house">${h.name}${h.allo?` · <span class="muted">known for ${h.allo}</span>`:''}</div>
+        </div>
+        <div class="p-persona">
+          <label>Persona name <input id="p-name" value="${esc(persona)}" placeholder="the name on your papers"></label>
+        </div>
+      </div>
+      <p class="p-blurb">${chosen.blurb}</p>
+      <div class="p-two">
+        <div class="p-why"><span class="lbl">Why you're trusted</span>${chosen.whyTrusted}</div>
+        <div class="p-house-face"><span class="lbl">The house, in public</span>${h.face}${h.street?`<div class="p-street">${h.street}</div>`:''}</div>
+      </div>
+      <div class="p-sell">
+        <div class="sell-h">How to sell it — memorize these three</div>
+        <ol>${chosen.sell.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
+        <div class="never"><span class="never-l">The one thing never to say</span>${esc(chosen.neverSay)}</div>
+      </div>
+      <div class="intake-actions">
+        <button class="btn ghost small" id="cover-reroll">↺ Assign me a different cover</button>
+        <button class="btn ghost small" id="cover-browse">Browse all covers</button>
+      </div>
+    </div>`;
+    p.innerHTML = s;
+    $("#p-name").oninput=e=>{ D.personaName=e.target.value; save(); };
+    $("#cover-reroll").onclick=()=> assignCover(true);
+    $("#cover-browse").onclick=()=>{ D._browse=true; renderCoverBrowse(p); };
+    return;
+  }
+
+  // no cover yet — offer assign + browse
+  s += `<p class="assess-lede">Every operative wears a life that explains where they are. The network can <b>assign</b> you one that fits ${m.name} work, or you can pick your own — several recruits may wear covers in the same house.</p>
+    <div class="intake-actions">
+      <button class="btn primary" id="cover-assign">Assign me a cover for a ${m.name} →</button>
+      <button class="btn ghost" id="cover-browse2">Let me choose</button>
+    </div>
+    <div class="grid-label">Covers that fit a ${m.name} especially well:</div>
+    <div class="cover-grid">${fits.map(coverCardHTML).join("")}</div>`;
+  p.innerHTML = s;
+  $("#cover-assign").onclick=()=> assignCover(false);
+  $("#cover-browse2").onclick=()=>{ renderCoverBrowse(p); };
+  bindCoverCards();
+}
+
+function coverCardHTML(c){
+  const h = HOUSES[c.house] || {name:"Float — no house"};
+  return `<button class="ccard ${D.coverId===c.id?'picked':''}" data-cover="${c.id}">
+    <div class="cc-title">${c.title}</div>
+    <div class="cc-house">${h.name}</div>
+    <div class="cc-blurb">${esc(c.blurb.split(". ")[0])}.</div>
+  </button>`;
+}
+function bindCoverCards(){ $$("[data-cover]").forEach(b=> b.onclick=()=> pickCover(b.dataset.cover)); }
+
+function renderCoverBrowse(p){
+  const byHouse = {};
+  COVERS.forEach(c=> (byHouse[c.house]=byHouse[c.house]||[]).push(c));
+  const order = ["ostralle","draubel","marisel","halcorr","corvaine","sevaline","float"];
+  let s = docHead("Cover Identity — Catalogue", {txt:"SELECT ONE",cls:"amber"});
+  s += `<p class="assess-lede">Pick any cover. More than one recruit may share a house or a role — the crew often plants several inside the same walls.</p>`;
+  order.forEach(hk=>{
+    const list = byHouse[hk]; if(!list) return;
+    const h = HOUSES[hk] || {name:"Float — city work", face:"Open work that ties you to no single house."};
+    s += `<div class="house-block">
+      <div class="house-name">${h.name}</div>
+      <div class="house-face">${h.face}</div>
+      <div class="cover-grid">${list.map(coverCardHTML).join("")}</div>
+    </div>`;
+  });
+  p.innerHTML = s;
+  bindCoverCards();
+}
+
+function pickCover(id){
+  D.coverId=id;
+  const c = coverById(id);
+  const dflt = c.names[0];
+  if(!D.personaName) D.personaName = dflt;
+  save(); toast(`Cover assigned: ${c.title}.`);
+  TAB="cover"; renderShell();
+}
+function assignCover(different){
+  const pool = COVERS.filter(c=> c.fitsMetals.includes(D.metalId) && (!different || c.id!==D.coverId));
+  const pick = (pool.length?pool:COVERS)[Math.floor(Math.random()* (pool.length?pool.length:COVERS.length))];
+  D.personaName=""; // let it default to the new cover
+  pickCover(pick.id);
+}
+
+/* ============================================================
+   LEDGER
+   ============================================================ */
+function kitItems(kitName){
+  const raw = (KITS[kitName]||"").split(/[.,]\s*/).map(s=>s.trim()).filter(Boolean);
+  return raw.filter(x=> !/boxings/i.test(x)).map(x=>({t:x, on:true}));
+}
+function renderLedger(p){
+  if(!D.metalId){ return notYet(p,"Ledger","Choose your gift first — your starting kit stocks the ledger."); }
+  const m = metalById(D.metalId);
+  if(!D.ledger.items.length) D.ledger.items = kitItems(m.kit);
+  let s = docHead("Operative's Ledger", {txt:"ACCOUNTS",cls:"green"});
+  s += `<div class="ledger-boxings">
+      <div class="coin"></div>
+      <label>Boxings on hand <input id="l-box" value="${esc(D.ledger.boxings)}" placeholder="roll your kit's boxings"></label>
+      <button class="btn ghost small" id="l-roll">Roll starting boxings (${kitBoxings(m.kit)})</button>
+    </div>`;
+  s += `<div class="block-label">Kit &amp; belongings <span class="muted">(${m.kit} kit — check what you're carrying, add your own)</span></div>`;
+  s += `<div class="ledger-items">`;
+  D.ledger.items.forEach((it,i)=>{
+    s += `<div class="litem"><label class="chk"><input type="checkbox" data-on="${i}" ${it.on?'checked':''}><span class="${it.on?'':'off'}">${esc(it.t)}</span></label><button class="linkx" data-del="${i}">remove</button></div>`;
+  });
+  s += `</div>`;
+  s += `<div class="additem"><input id="l-add" placeholder="add an item — a stolen key, a vial of steel, a letter you shouldn't have"><button class="btn small" id="l-addbtn">Add</button></div>`;
+  p.innerHTML = s;
+  $("#l-box").oninput=e=>{D.ledger.boxings=e.target.value; save();};
+  $("#l-roll").onclick=()=>{ D.ledger.boxings=String(rollKit(m.kit)); save(); renderTab(); };
+  $$("[data-on]").forEach(cb=> cb.onchange=()=>{ D.ledger.items[+cb.dataset.on].on=cb.checked; save(); renderTab(); });
+  $$("[data-del]").forEach(b=> b.onclick=()=>{ D.ledger.items.splice(+b.dataset.del,1); save(); renderTab(); });
+  const add=()=>{ const v=$("#l-add").value.trim(); if(v){ D.ledger.items.push({t:v,on:true}); save(); renderTab(); } };
+  $("#l-addbtn").onclick=add;
+  $("#l-add").onkeydown=e=>{ if(e.key==="Enter") add(); };
+}
+function kitBoxings(kit){ return ({Underworld:"1d20",Mercenary:"2d6",Noble:"4d20",Researcher:"3d12",Artisan:"4d8",Runaway:"0"})[kit]||"—"; }
+function rollKit(kit){
+  const map={Underworld:[1,20],Mercenary:[2,6],Noble:[4,20],Researcher:[3,12],Artisan:[4,8],Runaway:[0,0]};
+  const [n,f]=map[kit]||[0,0]; let t=0; for(let i=0;i<n;i++) t+=Math.floor(Math.random()*f)+1; return t;
+}
+
+/* ============================================================
+   JOURNAL
+   ============================================================ */
+function renderJournal(p){
+  let s = docHead("Field Notes &amp; Journal", {txt:"PRIVATE",cls:"blue"});
+  s += `<label class="fld"><span>People — allies, marks, debts, enemies</span><textarea id="j-rel" rows="4" placeholder="who matters to you, and how">${esc(D.journal.relationships)}</textarea></label>`;
+  s += `<div class="block-label" style="margin-top:16px">Session log</div><div class="jlog">`;
+  if(!D.journal.log.length) s += `<div class="muted small">No entries yet. After each session, jot what happened — the crew's memory is short and the Empire's is long.</div>`;
+  D.journal.log.forEach((e,i)=>{
+    s += `<div class="jentry"><div class="je-when">${esc(e.when||"—")}</div><div class="je-text">${esc(e.text)}</div><button class="linkx" data-jdel="${i}">delete</button></div>`;
+  });
+  s += `</div>`;
+  s += `<div class="jadd"><input id="j-when" placeholder="session / date"><textarea id="j-text" rows="2" placeholder="what happened, what you learned, what you're afraid of"></textarea><button class="btn small" id="j-addbtn">Add entry</button></div>`;
+  p.innerHTML=s;
+  $("#j-rel").oninput=e=>{D.journal.relationships=e.target.value; save();};
+  $("#j-addbtn").onclick=()=>{ const t=$("#j-text").value.trim(); if(!t)return; D.journal.log.unshift({when:$("#j-when").value.trim(), text:t}); save(); renderTab(); };
+  $$("[data-jdel]").forEach(b=> b.onclick=()=>{ D.journal.log.splice(+b.dataset.jdel,1); save(); renderTab(); });
+}
+
+/* ============================================================
+   CREW
+   ============================================================ */
+function renderCrew(p){
+  let s = docHead("Crew Contacts", {txt:"NEED TO KNOW",cls:"blue"});
+  s += `<p class="assess-lede">The others in your crew. Fill this as you meet them — the network keeps you compartmentalized on purpose, so you may not know everyone at first.</p>`;
+  s += `<div class="crewlist">`;
+  if(!D.crew.length) s += `<div class="muted small">No contacts logged yet.</div>`;
+  D.crew.forEach((c,i)=>{
+    s += `<div class="crewrow">
+      <input data-cn="${i}" value="${esc(c.name)}" placeholder="name / alias">
+      <input data-cr="${i}" value="${esc(c.role)}" placeholder="what they do (metal? cover?)">
+      <input data-cnote="${i}" value="${esc(c.note)}" placeholder="what you know / trust level">
+      <button class="linkx" data-cdel="${i}">×</button>
+    </div>`;
+  });
+  s += `</div><button class="btn small" id="crew-add">+ Add a contact</button>`;
+  p.innerHTML=s;
+  $("#crew-add").onclick=()=>{ D.crew.push({name:"",role:"",note:""}); save(); renderTab(); };
+  $$("[data-cn]").forEach(inp=> inp.oninput=()=>{D.crew[+inp.dataset.cn].name=inp.value; save();});
+  $$("[data-cr]").forEach(inp=> inp.oninput=()=>{D.crew[+inp.dataset.cr].role=inp.value; save();});
+  $$("[data-cnote]").forEach(inp=> inp.oninput=()=>{D.crew[+inp.dataset.cnote].note=inp.value; save();});
+  $$("[data-cdel]").forEach(b=> b.onclick=()=>{ D.crew.splice(+b.dataset.cdel,1); save(); renderTab(); });
+}
+
+/* ============================================================
+   SEALED SLIP
+   ============================================================ */
+function renderSealed(p){
+  let s = docHead("Sealed Slip", {txt:"GUARDIAN + YOU",cls:"red"});
+  s += `<p class="assess-lede">One secret only you and the Guardian (your DM) share. Write it here if the two of you have one — a hidden loyalty, a lie in your own papers, a thing you're really after. Leave it blank if not.</p>`;
+  s += `<label class="chk big"><input type="checkbox" id="seal-hide" ${D.sealedHidden?'checked':''}> Hide the contents at the table (blur until clicked)</label>`;
+  s += `<div class="sealwrap ${D.sealedHidden?'blur':''}" id="sealwrap"><textarea id="seal-text" rows="5" placeholder="for the Guardian's eyes and yours">${esc(D.sealed)}</textarea></div>`;
+  p.innerHTML=s;
+  $("#seal-text").oninput=e=>{D.sealed=e.target.value; save();};
+  $("#seal-hide").onchange=e=>{D.sealedHidden=e.target.checked; save(); renderTab();};
+  const w=$("#sealwrap"); if(w) w.onclick=()=>{ w.classList.remove("blur"); };
+}
+
+/* ---------- shared 'not yet' panel ---------- */
+function notYet(p, title, msg){
+  p.innerHTML = docHead(title, {txt:"PENDING"}) + `<div class="notyet"><div class="notyet-mark">✦</div><p>${msg}</p><button class="btn primary" id="go-intake">Go to Intake →</button></div>`;
+  $("#go-intake").onclick=()=>{ TAB="intake"; renderShell(); };
+}
+
+/* ============================================================
+   EXPORT / PRINT / IMPORT / RESET  (toolbar)
+   ============================================================ */
+function fullCharacter(){
+  const m = D.metalId?metalById(D.metalId):null;
+  const cover = D.coverId?coverById(D.coverId):null;
+  const house = cover?(HOUSES[cover.house]||{name:"Float"}):null;
+  let derived=null, skills=null;
+  if(m){
+    derived = deriveStats(m.attrs, true, m.invFrom);
+    skills={}; Object.entries(m.skills).forEach(([sk,rk])=> skills[sk]={ranks:rk, modifier:skillMod(sk,rk,m.attrs)});
+  }
+  return {
+    _app:"mistborn-crew-builder", _version:2, era:"Era 1 — Final Empire (~720 FE)",
+    characterName:D.charName, player:D.player,
+    packageId: m?m.id:null,
+    archetype: m?`${m.name} (${m.metal} Misting)`:"(gift not chosen)",
+    kind:"Allomancer",
+    ancestry:"Human", level:1,
+    attributes: m?m.attrs:null, derived, skills,
+    talents: m?[`${m.metal} Misting (Snap key)`, m.bonusTalent.name]:[],
+    startingKit: m?m.kit:null,
+    path: D.path,
+    cover: cover?{ role:cover.title, house:house?house.name:null, persona:D.personaName, whyTrusted:cover.whyTrusted, sell:cover.sell, neverSay:cover.neverSay }:null,
+    backstory: D.backstory,
+    ledger: D.ledger,
+    journal: D.journal,
+    crew: D.crew,
+    sealed: D.sealed || null,
+    // keep the old 'customization' shape so the existing Crewleader view still reads it
+    customization: { coverJob: cover?cover.title:"", snapped:D.backstory.snap, crewTie:(D.backstory.notes||""), house: house?house.name:"", persona:D.personaName },
+    filed:new Date().toISOString()
+  };
+}
+async function exportJSON(){
+  if(!D.charName){ toast("Name your recruit first (Intake or Dossier)."); return; }
+  const full=fullCharacter();
+  const slug=(D.charName||"recruit").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"recruit";
+  const filename=`${slug}.dossier.json`;
+  const json=JSON.stringify(full,null,2);
+  const downloads = window.claude ? await window.claude.use("downloads").catch(()=>null) : null;
+  if(downloads){
+    try{
+      const res = await downloads.save({ filename, data: json });
+      toast(res.status==="delivered" ? `Sent ${filename} to your Crewleader.` : `Downloaded ${filename} — send it to your Crewleader.`);
+      return;
+    }catch(err){
+      if(err && err.code==="declined") return;
+      // fall through and try the plain browser download below
+    }
+  }
+  try{
+    const blob=new Blob([json],{type:"application/json"});
+    const url=URL.createObjectURL(blob); const a=elx("a"); a.href=url; a.download=filename;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast(`Downloaded ${filename} — send it to your Crewleader.`);
+  }catch(err){
+    toast("Couldn't save the file right now — use Print to save a PDF copy instead, or ask your Guardian for help.");
+  }
+}
+function printDossier(){ window.print(); }
+function importJSON(evt){
+  const f=evt.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{ try{
+    const c=JSON.parse(e.target.result);
+    const nd=blankDossier();
+    nd.charName=c.characterName||""; nd.player=c.player||"";
+    nd.metalId=c.packageId||null; nd.path=c.path||null;
+    if(c.backstory) nd.backstory=Object.assign(nd.backstory,c.backstory);
+    if(c.ledger) nd.ledger=Object.assign(nd.ledger,c.ledger);
+    if(c.journal) nd.journal=Object.assign(nd.journal,c.journal);
+    if(c.crew) nd.crew=c.crew;
+    if(c.sealed) nd.sealed=c.sealed;
+    if(c.cover){ const match=COVERS.find(x=>x.title===c.cover.role); if(match) nd.coverId=match.id; nd.personaName=c.cover.persona||""; }
+    nd.quiz.done=true;
+    D=nd; save(); TAB= D.metalId?"dossier":"intake"; renderShell();
+    toast(`Loaded ${nd.charName||"file"}.`);
+  }catch(err){ toast("Couldn't read that file."); } };
+  r.readAsText(f); evt.target.value="";
+}
+function resetAll(){ if(confirm("Start a brand-new dossier? Your current one will be cleared from this browser.")){ D=blankDossier(); save(); TAB="intake"; renderShell(); } }
+
+/* ---------- init ---------- */
+function initFolder(){
+  renderShell();
+  $("#tb-export").onclick=exportJSON;
+  $("#tb-print").onclick=printDossier;
+  $("#tb-reset").onclick=resetAll;
+  $("#tb-import").onchange=importJSON;
+}
+document.addEventListener("DOMContentLoaded", initFolder);
+
+</script>
+<a href="../" style="position:fixed;left:10px;bottom:10px;z-index:99;font:12px 'Special Elite',monospace;letter-spacing:.08em;text-transform:uppercase;background:#2b2417;color:#f4ead2;padding:8px 12px;border-radius:3px;text-decoration:none;opacity:.85" class="noprint">&larr; Guildhall</a>
+</body>
+</html>

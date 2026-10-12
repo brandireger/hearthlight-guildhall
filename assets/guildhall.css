@@ -1,0 +1,63 @@
+/* Hearthlight Guildhall — shared theme. Matches the Crew Dossier: case-file desk, aged paper, typewriter stamps. */
+:root{
+  --desk:#33413a; --desk2:#2b382f;
+  --paper:#f4ead2; --paper2:#efe1c4; --paper-edge:#e2d3ad;
+  --ink:#2b2417; --ink-soft:#5c5138; --ink-faint:#7d6f50;
+  --manila:#dcc389; --manila-dk:#c9ab68;
+  --line:#cdb886; --accent:#7a1f18; --red:#a3322a; --lamp:#d9a441; --mist:#6fa39b;
+  --shadow:rgba(20,14,4,.35);
+  --f-display:'Cinzel',Georgia,serif; --f-body:'EB Garamond',Georgia,serif; --f-type:'Special Elite','Courier New',monospace;
+}
+@media (prefers-color-scheme:dark){:root{--desk:#100d08;--desk2:#171209;--paper:#e7dab8;--paper2:#ded0aa;--paper-edge:#cdba8c;--shadow:rgba(0,0,0,.55)}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:radial-gradient(1200px 700px at 50% -10%,var(--desk2),var(--desk));background-attachment:fixed;background-color:var(--desk);color:var(--ink);font:19px/1.55 var(--f-body);padding:20px 16px 72px}
+.wrap{max-width:780px;margin:0 auto}
+nav.top{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;align-items:baseline;max-width:780px;margin:0 auto 14px;font:13px var(--f-type);letter-spacing:.08em;text-transform:uppercase}
+nav.top a{color:#e8d9ae;text-decoration:none;border-bottom:1px dotted #e8d9ae88}
+nav.top a:hover,nav.top a:focus-visible{color:#fff;border-bottom-style:solid;outline:none}
+nav.top .brand{color:var(--lamp)}
+nav.top>span:last-child{color:#c9bb92}
+.sheet{background:var(--paper);background-image:linear-gradient(180deg,#ffffff18,transparent 140px);border:1px solid var(--paper-edge);border-radius:3px;box-shadow:0 14px 34px var(--shadow),0 1px 0 #fff4 inset;padding:clamp(22px,5vw,52px);position:relative}
+.sheet::before{content:"";position:absolute;inset:8px;border:1px solid var(--line);border-radius:2px;pointer-events:none;opacity:.7}
+.stamp{font:12.5px var(--f-type);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+h1{font:700 clamp(28px,6vw,42px)/1.1 var(--f-display);margin:0 0 6px;color:var(--ink);text-wrap:balance}
+h2{font:700 21px/1.2 var(--f-display);letter-spacing:.04em;margin:38px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--ink);color:var(--ink);text-wrap:balance}
+h3{font:700 16px var(--f-display);letter-spacing:.06em;text-transform:uppercase;margin:22px 0 6px;color:var(--accent)}
+p{margin:0 0 14px}
+.lede{font-size:21px;color:var(--ink-soft);font-style:italic}
+.byline{font:13px var(--f-type);color:var(--ink-faint);margin:0 0 22px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+strong{font-weight:600}
+ul,ol{padding-left:1.3em;margin:0 0 14px}li{margin-bottom:8px}
+table{width:100%;min-width:560px;border-collapse:collapse;font-size:16.5px;margin:10px 0 20px}
+th{font:12.5px var(--f-type);letter-spacing:.1em;text-transform:uppercase;text-align:left;background:var(--manila);color:var(--ink);padding:8px 10px;border:1px solid var(--manila-dk)}
+td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#00000008}
+.tablewrap{overflow-x:auto}
+.promise{border-left:4px solid var(--accent);padding:2px 0 2px 16px;margin:0 0 16px}
+.note{background:var(--paper2);border:1px dashed var(--manila-dk);padding:14px 16px;border-radius:3px;margin:18px 0}
+.note b.k{font:12.5px var(--f-type);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px}
+.ticks{list-style:none;padding:0}
+.ticks li{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.ticks input{width:20px;height:20px;margin-top:5px;accent-color:var(--accent);flex:none}
+.ticks label{cursor:pointer}
+.ticks input:checked+label{color:var(--ink-faint);text-decoration:line-through}
+.btn{display:inline-block;font:14px var(--f-type);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:#fff;background:var(--accent);padding:11px 18px;border-radius:3px;border:0;cursor:pointer;min-height:44px}
+.btn:hover{background:#933028}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin:18px 0 6px}
+.card{display:flex;flex-direction:column;background:var(--paper2);border:1px solid var(--manila-dk);border-top:12px solid var(--manila);border-radius:3px;padding:16px 18px 18px;text-decoration:none;color:var(--ink);transition:transform .15s,box-shadow .15s}
+.card:hover,.card:focus-visible{transform:translateY(-2px);box-shadow:0 10px 18px var(--shadow)}
+.card .tag{font:12px var(--f-type);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.card h3{margin:4px 0 6px;color:var(--ink);font-size:17px;text-transform:none;letter-spacing:.03em}
+.card p{font-size:16.5px;margin:0 0 10px;color:var(--ink-soft)}
+.card .go{margin-top:auto;font:13px var(--f-type);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.when{display:grid;gap:4px 18px;grid-template-columns:auto 1fr;font-size:19px;margin:14px 0 6px}
+.when dt{font:12.5px var(--f-type);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);padding-top:5px}
+.when dd{margin:0}
+footer{max-width:780px;margin:22px auto 0;text-align:center;font:12.5px var(--f-type);color:#c9bb92;letter-spacing:.06em}
+@media (max-width:520px){body{font-size:18px}.when{grid-template-columns:1fr}.when dt{padding-top:10px}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+@media print{body{background:#fff;padding:0}nav.top,footer{display:none}.sheet{box-shadow:none;border:0}.sheet::before{display:none}}
