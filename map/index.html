@@ -154,8 +154,8 @@ var map=document.getElementById('map');
 var S={size:false,f:'g',x:0,y:0,ppq:20,grid:true,lab:true,fog:false,snap:true,lock:false,rule:false,rev:{},tok:[],sel:null,bar:true};
 try{var sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){for(var k in sv)S[k]=sv[k]}}catch(e){}
 if(!S.tok.length){
- var pc=['#e8b04a','#d2605a','#6bb8a8','#8f86d8','#c8d46a'];
- for(var i=0;i<5;i++)S.tok.push({id:'p'+i,n:'PC '+(i+1),c:pc[i],x:19.5+i*1.1,y:43.5,f:'g',npc:0});
+ var pc=['#e8b04a','#d2605a','#6bb8a8','#8f86d8','#c8d46a','#d98fc0','#7fa6e0'];
+ for(var i=0;i<7;i++)S.tok.push({id:'p'+i,n:'PC '+(i+1),c:pc[i],x:19.5+i*1.1,y:43.5,f:'g',npc:0});
  var np=[];
  np.forEach(function(a,i){S.tok.push({id:'n'+i,n:a[0],c:a[4],x:a[1],y:a[2],f:a[3],npc:1})});
 }
